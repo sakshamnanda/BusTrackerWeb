@@ -35,5 +35,18 @@ namespace BusTrackerWeb.Controllers
         public void Delete(int id)
         {
         }
+    
+        /// <summary>
+        /// This function updates the current GPS location of a bus running a specific route.
+        /// </summary>
+        /// <param name="busId">Identifier of the bus running the route.</param>
+        /// <param name="runId">Identifier of the run associated with a specific route.</param>
+        /// <param name="longitude">Current GPS longitude of the bus.</param>
+        /// <param name="latitude">Current GPS latitude of the bus.</param>
+        /// <returns>HTTP Response Code</returns>
+        public int PutBusLocation(int busId, int runId, decimal longitude, decimal latitude)
+        {
+            return 0;
+        }
     }
 }
