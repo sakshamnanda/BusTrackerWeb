@@ -6,11 +6,11 @@ using System.Web;
 namespace BusTrackerWeb.Models
 {
     /// <summary>
-    /// This class models signing of a PTV API URL Request with a HMAC-SHA1 hash.  As per document:
+    /// This class models a PTV API URL Request signer with a HMAC-SHA1 hash.  As per document:
     /// PTV 2016,PTV Timetable API – API Key and Signature information', 
     /// https://static.ptv.vic.gov.au/PTV/PTV%20docs/API/1475462320/PTV-Timetable-API-key-and-signature-document.RTF.
     /// </summary>
-    public class PtApiSignitureModel
+    public class PtApiSignerModel
     {
         /// <summary>
         /// The unique API Key provided by PTV.
@@ -27,7 +27,7 @@ namespace BusTrackerWeb.Models
         /// </summary>
         /// <param name="key">The unique API Key provided by PTV.</param>
         /// <param name="developerId">The Developer Id provided by PTV.</param>
-        public PtApiSignitureModel(string key, string developerId)
+        public PtApiSignerModel(string key, string developerId)
         {
             ApiKey = key;
             ApiDeveloperId = developerId;
