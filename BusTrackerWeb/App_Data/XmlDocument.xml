@@ -500,8 +500,14 @@
             <summary>
             Update the longitude and latitude of a bus.
             </summary>
-            <param name="bus">The bus to be updated.</param>
+            <param name="bus">The bus object to be updated.</param>
             <returns>200 if updated.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.RouteController.GetRoutes">
+            <summary>
+            Get an array of bus routes.
+            </summary>
+            <returns>An array of bus route objects.</returns>
         </member>
         <member name="T:BusTrackerWeb.Models.PtApiSignerModel">
             <summary>

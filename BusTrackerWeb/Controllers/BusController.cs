@@ -15,7 +15,7 @@ namespace BusTrackerWeb.Controllers
         /// <summary>
         /// Update the longitude and latitude of a bus.
         /// </summary>
-        /// <param name="bus">The bus to be updated.</param>
+        /// <param name="bus">The bus object to be updated.</param>
         /// <returns>200 if updated.</returns>
         [ActionName("PutBusLocation")]
         public int PutBusLocation([FromBody]BusModel bus)
