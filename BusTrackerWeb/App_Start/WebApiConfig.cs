@@ -14,10 +14,10 @@ namespace BusTrackerWeb
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            // Controllers with Actions
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                name: "ControllerAndAction",
+                routeTemplate: "api/{controller}/{action}"
             );
         }
     }
