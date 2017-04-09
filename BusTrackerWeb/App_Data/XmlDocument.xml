@@ -541,6 +541,12 @@
             </summary>
             <returns>PTV API Runs Response.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRoutePatternAsync(System.Int32)">
+            <summary>
+            Get the pattern for a route run from the PTV API.
+            </summary>
+            <returns>PTV API Stopping Pattern.</returns>
+        </member>
         <member name="T:BusTrackerWeb.Controllers.RouteController">
             <summary>
             Controls all Bus Tracker API Route action requests.
@@ -555,6 +561,30 @@
         <member name="T:BusTrackerWeb.Models.BusModel">
             <summary>
             Bus Tracker Bus Model.
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiDisruptionRoute">
+            <summary>
+            PTV API Disruption Route Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiDisruptionDirection">
+            <summary>
+            PTV API Disruption Direction Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiDisruption">
+            <summary>
+            PTV API Disruption Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiStoppingPattern">
+            <summary>
+            PTV API Stopping Pattern Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>
         <member name="T:BusTrackerWeb.Models.PtvApiRoute">
@@ -614,6 +644,12 @@
             <param name="baseUrl">PTV API base Url without API request.</param>
             <param name="requestUrl">API request Url</param>
             <returns>PTV API Url.</returns>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiDeparture">
+            <summary>
+            PTV API Departure Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
         </member>
         <member name="T:BusTrackerWeb.Models.PtvApiStatus">
             <summary>

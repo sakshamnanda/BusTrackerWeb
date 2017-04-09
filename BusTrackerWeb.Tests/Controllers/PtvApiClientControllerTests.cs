@@ -40,5 +40,16 @@ namespace BusTrackerWeb.Controllers.Models.Tests
             Assert.IsNotNull(testRun);
             Assert.IsTrue(response.Status.Health == 1);
         }
+
+        [TestMethod()]
+        public async Task GetRoutePatternAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+
+            PtvApiStoppingPattern response = await apiControl.GetRoutePatternAsync(80843);
+
+            Assert.IsTrue(response.Departures.Count == 36);
+            Assert.IsTrue(response.Status.Health == 1);
+        }
     }
 }
