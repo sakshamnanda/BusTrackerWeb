@@ -169,6 +169,8 @@
     <Compile Include="Models\PtvApiDisruptionRoute.cs" />
     <Compile Include="Models\PtvApiDisruptionDirection.cs" />
     <Compile Include="Models\PtvApiDisruption.cs" />
+    <Compile Include="Models\PtvApiStopOnRouteResponse.cs" />
+    <Compile Include="Models\PtvApiStopOnRoute.cs" />
     <Compile Include="Models\PtvApiStoppingPattern.cs" />
     <Compile Include="Models\PtvApiRoute.cs" />
     <Compile Include="Models\PtvApiRun.cs" />

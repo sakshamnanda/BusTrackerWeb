@@ -139,5 +139,42 @@ namespace BusTrackerWeb.Controllers
             return patternResponse;
         }
 
+        /// <summary>
+        /// Get the stops for a route from the PTV API.
+        /// </summary>
+        /// <returns>PTV API Stopping Pattern.</returns>
+        public async Task<PtvApiStopOnRouteResponse> GetRouteStopsAsync(int routeId)
+        {
+            // Get all bus type routes.
+            const string GET_ROUTES_REQUEST = @"/v3/stops/route/{0}/route_type/2";
+
+            PtvApiStopOnRouteResponse stopsResponse = new PtvApiStopOnRouteResponse();
+
+            try
+            {
+                // Add request parameters.
+                string parameterisedRequest = string.Format(GET_ROUTES_REQUEST, routeId);
+
+                // Sign the API request with developer ID and key.
+                string clientRequest = ApiSigner.SignApiUrl(PTV_API_BASE_URL, parameterisedRequest);
+
+                // Send a request to the PTV API.
+                HttpResponseMessage response = await Client.GetAsync(clientRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Deserialise the JSON API response into strongly typed objects.
+                    stopsResponse = await response.Content.ReadAsAsync<PtvApiStopOnRouteResponse>();
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Trace.TraceError("GetRoutesAsync Exception: {0}", e.Message);
+            }
+
+            return stopsResponse;
+        }
+
+
     }
 }

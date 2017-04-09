@@ -547,6 +547,12 @@
             </summary>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteStopsAsync(System.Int32)">
+            <summary>
+            Get the stops for a route from the PTV API.
+            </summary>
+            <returns>PTV API Stopping Pattern.</returns>
+        </member>
         <member name="T:BusTrackerWeb.Controllers.RouteController">
             <summary>
             Controls all Bus Tracker API Route action requests.
@@ -578,6 +584,18 @@
         <member name="T:BusTrackerWeb.Models.PtvApiDisruption">
             <summary>
             PTV API Disruption Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiStopOnRouteResponse">
+            <summary>
+            PTV API Stop on Route Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiStopOnRoute">
+            <summary>
+            PTV API Stop on Route Model, Refer:
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>
