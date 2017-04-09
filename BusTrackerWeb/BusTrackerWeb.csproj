@@ -167,6 +167,8 @@
     </Compile>
     <Compile Include="Models\BusModel.cs" />
     <Compile Include="Models\PtvApiRoute.cs" />
+    <Compile Include="Models\PtvApiRun.cs" />
+    <Compile Include="Models\PtvApiRunResponse.cs" />
     <Compile Include="Models\PtvApiRouteResponse.cs" />
     <Compile Include="Models\PtvApiSignerModel.cs" />
     <Compile Include="Models\PtvApiStatus.cs" />

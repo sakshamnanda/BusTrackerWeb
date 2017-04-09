@@ -19,12 +19,26 @@ namespace BusTrackerWeb.Controllers.Models.Tests
 
             PtvApiRouteResponse response = await apiControl.GetRoutesAsync();
 
-            PtvApiRoute testRoute = 
-                response.Routes.Find(r => r.route_name.Contains("Geelong Station") && 
-                r.route_name.Contains("Deakin University") && 
+            PtvApiRoute testRoute =
+                response.Routes.Find(r => r.route_name.Contains("Geelong Station") &&
+                r.route_name.Contains("Deakin University") &&
                 r.route_number == "41");
 
             Assert.IsTrue(testRoute.route_id == 10846);
+            Assert.IsTrue(response.Status.Health == 1);
+        }
+
+        [TestMethod()]
+        public async Task GetRouteRunsAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+
+            PtvApiRunResponse response = await apiControl.GetRouteRunsAsync(10846);
+
+            PtvApiRun testRun = response.Runs.OrderByDescending(r => r.run_id).First();
+
+            Assert.IsNotNull(testRun);
+            Assert.IsTrue(response.Status.Health == 1);
         }
     }
 }

@@ -496,6 +496,11 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:BusTrackerWeb.Controllers.BusController">
+            <summary>
+            Controls all Bus Tracker API Bus action requests.
+            </summary>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.BusController.PutBusLocation(BusTrackerWeb.Models.BusModel)">
             <summary>
             Update the longitude and latitude of a bus.
@@ -503,11 +508,78 @@
             <param name="bus">The bus object to be updated.</param>
             <returns>200 if updated.</returns>
         </member>
+        <member name="T:BusTrackerWeb.Controllers.HomeController">
+            <summary>
+            Controls all Bus Tracker Home View actions.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.HomeController.Index">
+            <summary>
+            Open the Home View.
+            </summary>
+            <returns>Index View.</returns>
+        </member>
+        <member name="T:BusTrackerWeb.Controllers.PtvApiClientController">
+            <summary>
+            Controls all Bus Tracker PTV API requests.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.#ctor">
+            <summary>
+            Initialise the clent controller.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRoutesAsync">
+            <summary>
+            Get all bus routes from the PTV API.
+            </summary>
+            <returns>PTV API Route Response.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteRunsAsync(System.Int32)">
+            <summary>
+            Get all route runs from the PTV API.
+            </summary>
+            <returns>PTV API Runs Response.</returns>
+        </member>
+        <member name="T:BusTrackerWeb.Controllers.RouteController">
+            <summary>
+            Controls all Bus Tracker API Route action requests.
+            </summary>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.RouteController.GetRoutes">
             <summary>
             Get an array of bus routes.
             </summary>
             <returns>An array of bus route objects.</returns>
+        </member>
+        <member name="T:BusTrackerWeb.Models.BusModel">
+            <summary>
+            Bus Tracker Bus Model.
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiRoute">
+            <summary>
+            PTV API Route Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiRun">
+            <summary>
+            PTV API Run Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiRunResponse">
+            <summary>
+            PTV API Runs Response Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiRouteResponse">
+            <summary>
+            PTV API Route Response Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
         </member>
         <member name="T:BusTrackerWeb.Models.PtvApiSignerModel">
             <summary>
@@ -542,6 +614,17 @@
             <param name="baseUrl">PTV API base Url without API request.</param>
             <param name="requestUrl">API request Url</param>
             <returns>PTV API Url.</returns>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiStatus">
+            <summary>
+            PTV API Status Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.RouteModel">
+            <summary>
+            Bus Tracker Route Model.
+            </summary>
         </member>
     </members>
 </doc>
