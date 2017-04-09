@@ -10,6 +10,9 @@ using System.Web.Http;
 
 namespace BusTrackerWeb.Controllers
 {
+    /// <summary>
+    /// Controls all Bus Tracker API Bus action requests.
+    /// </summary>
     public class BusController : ApiController
     {
         /// <summary>

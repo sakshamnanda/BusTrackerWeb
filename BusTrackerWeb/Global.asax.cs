@@ -22,6 +22,7 @@ namespace BusTrackerWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+            // Setup a single app PTV API Client i.e. to prevent http port exhaustion.
             PtvApiControl = new Controllers.PtvApiClientController(); 
         }
     }

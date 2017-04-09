@@ -166,9 +166,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BusModel.cs" />
-    <Compile Include="Models\PtvApiGatewayModel.cs" />
     <Compile Include="Models\PtvApiRoute.cs" />
-    <Compile Include="Models\PtvApiRouteResponsecs.cs" />
+    <Compile Include="Models\PtvApiRouteResponse.cs" />
     <Compile Include="Models\PtvApiSignerModel.cs" />
     <Compile Include="Models\PtvApiStatus.cs" />
     <Compile Include="Models\RouteModel.cs" />
