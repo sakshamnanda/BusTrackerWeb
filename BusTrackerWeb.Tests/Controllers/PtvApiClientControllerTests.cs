@@ -59,7 +59,7 @@ namespace BusTrackerWeb.Controllers.Models.Tests
 
             PtvApiStopOnRouteResponse response = await apiControl.GetRouteStopsAsync(10846);
 
-            Assert.IsTrue(response.Stops.Count == 36);
+            Assert.IsTrue(response.Stops.Count == 52);
             Assert.IsTrue(response.Status.Health == 1);
         }
     }
