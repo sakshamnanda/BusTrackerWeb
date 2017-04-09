@@ -5,6 +5,9 @@ using System.Web;
 
 namespace BusTrackerWeb.Models
 {
+    /// <summary>
+    /// Bus Tracker Route Model.
+    /// </summary>
     public class RouteModel
     {
         public int RouteId { get; set; }

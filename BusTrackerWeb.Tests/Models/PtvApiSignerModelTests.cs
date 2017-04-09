@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace BusTrackerWeb.Models.Models.Tests
 {
     [TestClass()]
-    public class PtApiSignerModelTests
+    public class PtvApiSignerModelTests
     {
         [TestMethod()]
         public void SignApiUrlTest()
@@ -19,7 +19,7 @@ namespace BusTrackerWeb.Models.Models.Tests
             string baseUrl = "http://timetableapi.ptv.vic.gov.au";
             string requestUrl = "/v3/routes";
 
-            PtApiSignerModel apiSigniture = new PtApiSignerModel(key, developerId);
+            PtvApiSignerModel apiSigniture = new PtvApiSignerModel(key, developerId);
 
             string signedUrl = apiSigniture.SignApiUrl(baseUrl, requestUrl);
 
