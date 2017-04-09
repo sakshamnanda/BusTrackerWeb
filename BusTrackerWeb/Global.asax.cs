@@ -6,11 +6,14 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using BusTrackerWeb.Controllers;
 
 namespace BusTrackerWeb
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
+        public static PtvApiClientController PtvApiControl;
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -18,6 +21,8 @@ namespace BusTrackerWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            PtvApiControl = new Controllers.PtvApiClientController(); 
         }
     }
 }
