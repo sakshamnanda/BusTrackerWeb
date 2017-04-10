@@ -40,28 +40,10 @@ namespace BusTrackerWeb.Controllers
         public async Task<PtvApiRouteResponse> GetRoutesAsync()
         {
             // Get all bus type routes.
-            const string GET_ROUTES_REQUEST = @"/v3/routes?route_types=2";
+            string getRoutesRequest = @"/v3/routes?route_types=2";
 
-            PtvApiRouteResponse routeResponse = new PtvApiRouteResponse();
-
-            try
-            {
-                // Sign the API request with developer ID and key.
-                string clientRequest = ApiSigner.SignApiUrl(PTV_API_BASE_URL, GET_ROUTES_REQUEST);
-
-                // Send a request to the PTV API.
-                HttpResponseMessage response = await Client.GetAsync(clientRequest);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // Deserialise the JSON API response into strongly typed objects.
-                    routeResponse = await response.Content.ReadAsAsync<PtvApiRouteResponse>();
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Trace.TraceError("GetRoutesAsync Exception: {0}", e.Message);
-            }
+            PtvApiRouteResponse routeResponse = 
+                await GetResponse<PtvApiRouteResponse>(getRoutesRequest);
 
             return routeResponse;
         }
@@ -72,37 +54,14 @@ namespace BusTrackerWeb.Controllers
         /// <returns>PTV API Runs Response.</returns>
         public async Task<PtvApiRunResponse> GetRouteRunsAsync(int routeId)
         {
-            // Get all bus type routes.
-            const string GET_ROUTES_REQUEST = @"/v3/runs/route/{0}";
+            // Get all bus route runs.
+            string getRunsRequest = string.Format("/v3/runs/route/{0}", routeId);
 
-            PtvApiRunResponse runResponse = new PtvApiRunResponse();
-
-            try
-            {
-                // Add request parameters.
-                string parameterisedRequest = string.Format(GET_ROUTES_REQUEST, routeId);
-
-                // Sign the API request with developer ID and key.
-                string clientRequest = ApiSigner.SignApiUrl(PTV_API_BASE_URL, parameterisedRequest);
-
-                // Send a request to the PTV API.
-                HttpResponseMessage response = await Client.GetAsync(clientRequest);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // Deserialise the JSON API response into strongly typed objects.
-                    runResponse = await response.Content.ReadAsAsync<PtvApiRunResponse>();
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Trace.TraceError("GetRoutesAsync Exception: {0}", e.Message);
-            }
+            PtvApiRunResponse runResponse = await GetResponse<PtvApiRunResponse>(getRunsRequest);
 
             return runResponse;
         }
-
-
+        
         /// <summary>
         /// Get the pattern for a route run from the PTV API.
         /// </summary>
@@ -110,31 +69,10 @@ namespace BusTrackerWeb.Controllers
         public async Task<PtvApiStoppingPattern> GetRoutePatternAsync(int runId)
         {
             // Get all bus type routes.
-            const string GET_ROUTES_REQUEST = @"/v3/pattern/run/{0}/route_type/2";
+            string getPatternRequest = string.Format("/v3/pattern/run/{0}/route_type/2", runId);
 
-            PtvApiStoppingPattern patternResponse = new PtvApiStoppingPattern();
-
-            try
-            {
-                // Add request parameters.
-                string parameterisedRequest = string.Format(GET_ROUTES_REQUEST, runId);
-
-                // Sign the API request with developer ID and key.
-                string clientRequest = ApiSigner.SignApiUrl(PTV_API_BASE_URL, parameterisedRequest);
-
-                // Send a request to the PTV API.
-                HttpResponseMessage response = await Client.GetAsync(clientRequest);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // Deserialise the JSON API response into strongly typed objects.
-                    patternResponse = await response.Content.ReadAsAsync<PtvApiStoppingPattern>();
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Trace.TraceError("GetRoutesAsync Exception: {0}", e.Message);
-            }
+            PtvApiStoppingPattern patternResponse = 
+                await GetResponse<PtvApiStoppingPattern>(getPatternRequest);
 
             return patternResponse;
         }
@@ -146,35 +84,44 @@ namespace BusTrackerWeb.Controllers
         public async Task<PtvApiStopOnRouteResponse> GetRouteStopsAsync(int routeId)
         {
             // Get all bus type routes.
-            const string GET_ROUTES_REQUEST = @"/v3/stops/route/{0}/route_type/2";
+            string getStopsRequest = string.Format("/v3/stops/route/{0}/route_type/2", routeId);
 
-            PtvApiStopOnRouteResponse stopsResponse = new PtvApiStopOnRouteResponse();
-
-            try
-            {
-                // Add request parameters.
-                string parameterisedRequest = string.Format(GET_ROUTES_REQUEST, routeId);
-
-                // Sign the API request with developer ID and key.
-                string clientRequest = ApiSigner.SignApiUrl(PTV_API_BASE_URL, parameterisedRequest);
-
-                // Send a request to the PTV API.
-                HttpResponseMessage response = await Client.GetAsync(clientRequest);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // Deserialise the JSON API response into strongly typed objects.
-                    stopsResponse = await response.Content.ReadAsAsync<PtvApiStopOnRouteResponse>();
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Trace.TraceError("GetRoutesAsync Exception: {0}", e.Message);
-            }
+            PtvApiStopOnRouteResponse stopsResponse =
+                await GetResponse<PtvApiStopOnRouteResponse>(getStopsRequest);
 
             return stopsResponse;
         }
 
+        /// <summary>
+        /// Generic PTV API Get Request function.
+        /// </summary>
+        /// <typeparam name="T">PTV API object type to be retrieved.</typeparam>
+        /// <param name="request">API request string.</param>
+        /// <returns>The API response.</returns>
+        private async Task<T> GetResponse<T>(string request)
+        {
+            T response = default(T);
 
+            try
+            {
+                // Sign the API request with developer ID and key.
+                string clientRequest = ApiSigner.SignApiUrl(PTV_API_BASE_URL, request);
+
+                // Send a request to the PTV API.
+                HttpResponseMessage httpResponse = await Client.GetAsync(clientRequest);
+
+                if (httpResponse.IsSuccessStatusCode)
+                {
+                    // Deserialise the JSON API response into strongly typed objects.
+                    response = await httpResponse.Content.ReadAsAsync<T>();
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Trace.TraceError("PTV API Request Exception: {0}", e.Message);
+            }
+
+            return response;
+        }
     }
 }

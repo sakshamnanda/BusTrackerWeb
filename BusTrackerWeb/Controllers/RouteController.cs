@@ -21,8 +21,12 @@ namespace BusTrackerWeb.Controllers
         public List<RouteModel> GetRoutes()
         {
             List<RouteModel> routes = new List<RouteModel>();
-            routes.Add(new Models.RouteModel { RouteId = 1, RouteName = "Geelong Station to Deakin", RouteNumber = 41 });
-            routes.Add(new Models.RouteModel { RouteId = 2, RouteName = "Deakin to Geelong Station", RouteNumber = 42 });
+
+            // Get all routes from the PTV API.
+
+            // Convert PTV schema objects Bus Tracker schema objects.
+
+
 
             return routes;
         }
