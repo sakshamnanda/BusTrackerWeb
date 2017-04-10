@@ -6,6 +6,9 @@ using System.Web.Http.ModelBinding;
 
 namespace BusTrackerWeb.Models
 {
+    /// <summary>
+    /// Bus Tracker Bus Model.
+    /// </summary>
     public class BusModel
     {
         public int BusId { get; set; }
