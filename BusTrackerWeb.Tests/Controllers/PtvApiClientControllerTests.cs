@@ -17,15 +17,14 @@ namespace BusTrackerWeb.Controllers.Models.Tests
         {
             PtvApiClientController apiControl = new PtvApiClientController();
 
-            PtvApiRouteResponse response = await apiControl.GetRoutesAsync();
+            List<RouteModel> routes = await apiControl.GetRoutesAsync();
 
-            PtvApiRoute testRoute =
-                response.Routes.Find(r => r.route_name.Contains("Geelong Station") &&
-                r.route_name.Contains("Deakin University") &&
-                r.route_number == "41");
+            RouteModel testRoute =
+                routes.Find(r => r.RouteName.Contains("Geelong Station") &&
+                r.RouteName.Contains("Deakin University") &&
+                r.RouteNumber == "41");
 
-            Assert.IsTrue(testRoute.route_id == 10846);
-            Assert.IsTrue(response.Status.Health == 1);
+            Assert.IsTrue(testRoute.RouteId == 10846);
         }
 
         [TestMethod()]

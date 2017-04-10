@@ -36,16 +36,41 @@ namespace BusTrackerWeb.Controllers
         /// <summary>
         /// Get all bus routes from the PTV API.
         /// </summary>
-        /// <returns>PTV API Route Response.</returns>
-        public async Task<PtvApiRouteResponse> GetRoutesAsync()
+        /// <returns>Bus Route collection.</returns>
+        public async Task<List<RouteModel>> GetRoutesAsync()
         {
+            List<RouteModel> routes = new List<RouteModel>();
+
             // Get all bus type routes.
             string getRoutesRequest = @"/v3/routes?route_types=2";
-
             PtvApiRouteResponse routeResponse = 
-                await GetResponse<PtvApiRouteResponse>(getRoutesRequest);
+                await GetPtvApiResponse<PtvApiRouteResponse>(getRoutesRequest);
 
-            return routeResponse;
+            // If the response is healthy try to convert the API response to a route collection.
+            if(routeResponse.Status.Health == 1)
+            {
+                foreach(PtvApiRoute apiRoute in routeResponse.Routes)
+                {
+                    try
+                    {
+                        routes.Add(new RouteModel
+                        {
+                            RouteId = apiRoute.route_id,
+                            RouteName = apiRoute.route_name,
+                            RouteNumber = apiRoute.route_number
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Trace.TraceError("GetRoutesAsync Exception: {0}", e.Message);
+                    }
+                }
+            }
+
+            // Order by route name.
+            routes = routes.OrderBy(r => r.RouteName).ToList();
+                
+            return routes;
         }
 
         /// <summary>
@@ -57,7 +82,7 @@ namespace BusTrackerWeb.Controllers
             // Get all bus route runs.
             string getRunsRequest = string.Format("/v3/runs/route/{0}", routeId);
 
-            PtvApiRunResponse runResponse = await GetResponse<PtvApiRunResponse>(getRunsRequest);
+            PtvApiRunResponse runResponse = await GetPtvApiResponse<PtvApiRunResponse>(getRunsRequest);
 
             return runResponse;
         }
@@ -72,7 +97,7 @@ namespace BusTrackerWeb.Controllers
             string getPatternRequest = string.Format("/v3/pattern/run/{0}/route_type/2", runId);
 
             PtvApiStoppingPattern patternResponse = 
-                await GetResponse<PtvApiStoppingPattern>(getPatternRequest);
+                await GetPtvApiResponse<PtvApiStoppingPattern>(getPatternRequest);
 
             return patternResponse;
         }
@@ -87,7 +112,7 @@ namespace BusTrackerWeb.Controllers
             string getStopsRequest = string.Format("/v3/stops/route/{0}/route_type/2", routeId);
 
             PtvApiStopOnRouteResponse stopsResponse =
-                await GetResponse<PtvApiStopOnRouteResponse>(getStopsRequest);
+                await GetPtvApiResponse<PtvApiStopOnRouteResponse>(getStopsRequest);
 
             return stopsResponse;
         }
@@ -98,7 +123,7 @@ namespace BusTrackerWeb.Controllers
         /// <typeparam name="T">PTV API object type to be retrieved.</typeparam>
         /// <param name="request">API request string.</param>
         /// <returns>The API response.</returns>
-        private async Task<T> GetResponse<T>(string request)
+        private async Task<T> GetPtvApiResponse<T>(string request)
         {
             T response = default(T);
 
@@ -118,7 +143,7 @@ namespace BusTrackerWeb.Controllers
             }
             catch (Exception e)
             {
-                System.Diagnostics.Trace.TraceError("PTV API Request Exception: {0}", e.Message);
+                System.Diagnostics.Trace.TraceError("GetPtvApiResponse Exception: {0}", e.Message);
             }
 
             return response;

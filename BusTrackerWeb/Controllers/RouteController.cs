@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace BusTrackerWeb.Controllers
@@ -14,21 +15,13 @@ namespace BusTrackerWeb.Controllers
     public class RouteController : ApiController
     {
         /// <summary>
-        /// Get an array of bus routes.
+        /// Get a collection of bus routes.
         /// </summary>
         /// <returns>An array of bus route objects.</returns>
         [ActionName("GetRoutes")]
-        public List<RouteModel> GetRoutes()
+        public async Task<List<RouteModel>> GetRoutes()
         {
-            List<RouteModel> routes = new List<RouteModel>();
-
-            // Get all routes from the PTV API.
-
-            // Convert PTV schema objects Bus Tracker schema objects.
-
-
-
-            return routes;
+            return await WebApiApplication.PtvApiControl.GetRoutesAsync();
         }
     }
 }

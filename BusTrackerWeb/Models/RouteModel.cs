@@ -14,6 +14,6 @@ namespace BusTrackerWeb.Models
 
         public string RouteName { get; set; }
 
-        public int RouteNumber { get; set; }
+        public string RouteNumber { get; set; }
     }
 }
