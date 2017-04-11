@@ -15,5 +15,7 @@ namespace BusTrackerWeb.Models
         public RouteModel Route { get; set; }
 
         public StopModel FinalStop { get; set; }
+
+        public List<RunDeparture> Departures { get; set; }
     }
 }

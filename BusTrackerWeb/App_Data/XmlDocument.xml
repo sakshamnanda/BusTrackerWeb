@@ -535,21 +535,21 @@
             </summary>
             <returns>Bus Route collection.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteStopsAsync(BusTrackerWeb.Models.RouteModel)">
+            <summary>
+            Get the stops for a route from the PTV API.
+            </summary>
+            <returns>PTV API Stopping Pattern.</returns>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteRunsAsync(BusTrackerWeb.Models.RouteModel)">
             <summary>
             Get all route runs from the PTV API.
             </summary>
             <returns>PTV API Runs Response.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRoutePatternAsync(BusTrackerWeb.Models.RunModel)">
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRunDeparturesAsync(BusTrackerWeb.Models.RunModel)">
             <summary>
-            Get the pattern for a route run from the PTV API.
-            </summary>
-            <returns>PTV API Stopping Pattern.</returns>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteStopsAsync(BusTrackerWeb.Models.RouteModel)">
-            <summary>
-            Get the stops for a route from the PTV API.
+            Get the departures for a specific run from the PTV API.
             </summary>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
