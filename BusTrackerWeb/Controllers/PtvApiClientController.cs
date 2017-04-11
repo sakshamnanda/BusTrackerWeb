@@ -77,44 +77,119 @@ namespace BusTrackerWeb.Controllers
         /// Get all route runs from the PTV API.
         /// </summary>
         /// <returns>PTV API Runs Response.</returns>
-        public async Task<PtvApiRunResponse> GetRouteRunsAsync(int routeId)
+        public async Task<List<RunModel>> GetRouteRunsAsync(RouteModel route)
         {
-            // Get all bus route runs.
-            string getRunsRequest = string.Format("/v3/runs/route/{0}", routeId);
-
+            // Get all stops on a run.
+            List<StopModel> stops = await GetRouteStopsAsync(route);
+            
+            // Get all route runs.
+            string getRunsRequest = string.Format("/v3/runs/route/{0}", route.RouteId);
             PtvApiRunResponse runResponse = await GetPtvApiResponse<PtvApiRunResponse>(getRunsRequest);
 
-            return runResponse;
+            // If the response is healthy try to convert the API response to a run collection.
+            List<RunModel> runs = new List<RunModel>();
+            if (runResponse.Status.Health == 1)
+            {
+                foreach (PtvApiRun apiRun in runResponse.Runs)
+                {
+                    try
+                    {
+                        runs.Add(new RunModel
+                        {
+                            RunId = apiRun.run_id,
+                            Route = route,
+                            FinalStop = stops.First(s => s.StopId == apiRun.final_stop_id)
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Trace.TraceError("GetRouteRunsAsync Exception: {0}", e.Message);
+                    }
+                }
+            }
+
+            return runs;
         }
         
         /// <summary>
         /// Get the pattern for a route run from the PTV API.
         /// </summary>
         /// <returns>PTV API Stopping Pattern.</returns>
-        public async Task<PtvApiStoppingPattern> GetRoutePatternAsync(int runId)
+        public async Task<List<RunDeparture>> GetRoutePatternAsync(RunModel run)
         {
+            // Get all stops on a run.
+            List<StopModel> stops = await GetRouteStopsAsync(run.Route);
+
             // Get all bus type routes.
-            string getPatternRequest = string.Format("/v3/pattern/run/{0}/route_type/2", runId);
+            string getPatternRequest = string.Format("/v3/pattern/run/{0}/route_type/2", run.RunId);
 
             PtvApiStoppingPattern patternResponse = 
                 await GetPtvApiResponse<PtvApiStoppingPattern>(getPatternRequest);
 
-            return patternResponse;
+            // If the response is healthy try to convert the API response to a pattern collection.
+            List<RunDeparture> runDepartures = new List<RunDeparture>();
+            if (patternResponse.Status.Health == 1)
+            {
+                foreach (PtvApiDeparture apiDeparture in patternResponse.Departures)
+                {
+                    try
+                    {
+                        runDepartures.Add(new RunDeparture
+                        {
+                            Run = run,
+                            Stop = stops.First(s => s.StopId == apiDeparture.stop_id),
+                            RunScheduledDeparture = Convert.ToDateTime(apiDeparture.scheduled_departure_utc)
+                        });
+
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Trace.TraceError("GetRoutePatternAsync Exception: {0}", e.Message);
+                    }
+                }
+
+                runDepartures = runDepartures.OrderBy(r => r.RunScheduledDeparture).ToList();
+            }
+
+            return runDepartures;
         }
 
         /// <summary>
         /// Get the stops for a route from the PTV API.
         /// </summary>
         /// <returns>PTV API Stopping Pattern.</returns>
-        public async Task<PtvApiStopOnRouteResponse> GetRouteStopsAsync(int routeId)
+        public async Task<List<StopModel>> GetRouteStopsAsync(RouteModel route)
         {
             // Get all bus type routes.
-            string getStopsRequest = string.Format("/v3/stops/route/{0}/route_type/2", routeId);
+            string getStopsRequest = string.Format("/v3/stops/route/{0}/route_type/2", route.RouteId);
 
             PtvApiStopOnRouteResponse stopsResponse =
                 await GetPtvApiResponse<PtvApiStopOnRouteResponse>(getStopsRequest);
 
-            return stopsResponse;
+            // If the response is healthy try to convert the API response to a route collection.
+            List<StopModel> stops = new List<StopModel>();
+            if (stopsResponse.Status.Health == 1)
+            {
+                foreach (PtvApiStopOnRoute apiStop in stopsResponse.Stops)
+                {
+                    try
+                    {
+                        stops.Add(new StopModel
+                        {
+                            StopId = apiStop.stop_id,
+                            StopName = apiStop.stop_name,
+                            StopLatitude = apiStop.stop_latitude,
+                            StopLongitude = apiStop.stop_longitude
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Trace.TraceError("GetRouteStopsAsync Exception: {0}", e.Message);
+                    }
+                }
+            }
+
+            return stops;
         }
 
         /// <summary>

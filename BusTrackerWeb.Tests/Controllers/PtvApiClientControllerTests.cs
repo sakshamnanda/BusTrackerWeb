@@ -31,35 +31,35 @@ namespace BusTrackerWeb.Controllers.Models.Tests
         public async Task GetRouteRunsAsyncTest()
         {
             PtvApiClientController apiControl = new PtvApiClientController();
+            RouteModel route = new RouteModel { RouteId = 10846 };
 
-            PtvApiRunResponse response = await apiControl.GetRouteRunsAsync(10846);
+            List<RunModel> runs = await apiControl.GetRouteRunsAsync(route);
 
-            PtvApiRun testRun = response.Runs.OrderByDescending(r => r.run_id).First();
-
-            Assert.IsNotNull(testRun);
-            Assert.IsTrue(response.Status.Health == 1);
+            Assert.IsNotNull(runs.Count != 0);
         }
 
         [TestMethod()]
         public async Task GetRoutePatternAsyncTest()
         {
             PtvApiClientController apiControl = new PtvApiClientController();
+            RouteModel route = new RouteModel { RouteId = 10846 };
+            List<RunModel> runs = await apiControl.GetRouteRunsAsync(route);
 
-            PtvApiStoppingPattern response = await apiControl.GetRoutePatternAsync(80843);
 
-            Assert.IsTrue(response.Departures.Count == 36);
-            Assert.IsTrue(response.Status.Health == 1);
+            List<RunDeparture> departures = await apiControl.GetRoutePatternAsync(runs.Last());
+
+            Assert.IsTrue(departures.Count == 34);
         }
 
         [TestMethod()]
         public async Task GetRouteStopsAsyncTest()
         {
             PtvApiClientController apiControl = new PtvApiClientController();
+            RouteModel route = new RouteModel { RouteId = 10846 };
 
-            PtvApiStopOnRouteResponse response = await apiControl.GetRouteStopsAsync(10846);
+            List<StopModel> stops = await apiControl.GetRouteStopsAsync(route);
 
-            Assert.IsTrue(response.Stops.Count == 52);
-            Assert.IsTrue(response.Status.Health == 1);
+            Assert.IsTrue(stops.Count == 52);
         }
     }
 }
