@@ -1,6 +1,7 @@
 ﻿using BusTrackerWeb.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -180,7 +181,7 @@ namespace BusTrackerWeb.Controllers
                         {
                             Run = run,
                             Stop = stops.First(s => s.StopId == apiDeparture.stop_id),
-                            RunScheduledDeparture = Convert.ToDateTime(apiDeparture.scheduled_departure_utc)
+                            RunScheduledDeparture = Convert.ToDateTime(apiDeparture.scheduled_departure_utc),
                         });
 
                     }
@@ -196,34 +197,63 @@ namespace BusTrackerWeb.Controllers
             return runDepartures;
         }
 
-        public async Task<List<RunDeparture>> GetCurrentRunDeparturesAsync(RouteModel route)
+        /// <summary>
+        /// Get all bus routes from the PTV API.
+        /// </summary>
+        /// <returns>Bus Route collection.</returns>
+        public async Task<DepartureModel> GetStopDepartureAsync(StopModel stop, RouteModel route)
         {
-            // Get all runs for a route.
-            List<RunModel> routeRuns = await GetRouteRunsAsync(route);
+            List<DepartureModel> departures = new List<DepartureModel>();
+            DepartureModel nextDeparture = new DepartureModel();
 
-            // Get the departures for each run.            
-            foreach(RunModel run in routeRuns)
+            // Get all departures for a route stop.
+            string getDeparturesRequest =  
+                string.Format("/v3/departures/route_type/2/stop/{0}/route/{1}", stop.StopId, 
+                route.RouteId);
+
+            PtvApiDeparturesResponse departuresResponse =
+                await GetPtvApiResponse<PtvApiDeparturesResponse>(getDeparturesRequest);
+
+
+            // If the response is healthy try to convert the API response to a route collection.
+            if (departuresResponse.Status.Health == 1)
             {
-                run.Departures = await GetRunDeparturesAsync(run);
-                
-            }
-
-            // Order runs by first scheduled departure.
-            routeRuns = routeRuns.OrderBy(r => r.Departures.First().RunScheduledDeparture).ToList();
-
-            // Create a collection of incompleted runs.
-            List<RunModel> currentRuns = new List<RunModel>();
-            foreach (RunModel run in routeRuns)
-            {
-                if (run.Departures.Exists(d => d.RunScheduledDeparture >= DateTime.Now))
+                foreach (PtvApiDeparture apiDeparture in departuresResponse.Departures)
                 {
-                    currentRuns.Add(run);
+                    try
+                    {
+                        departures.Add(new DepartureModel
+                        {
+                            Stop = stop,
+                            Route = route,
+                            Run = new RunModel { RunId = apiDeparture.run_id },
+                            Direction = new DirectionModel { DirectionId = apiDeparture.direction_id },
+                            Disruptions = apiDeparture.disruption_ids,
+                            ScheduledDeparture = DateTime.Parse(apiDeparture.scheduled_departure_utc, null, DateTimeStyles.AssumeLocal),
+                            AtPlatform = apiDeparture.at_platform,
+                            PlatformNumber = apiDeparture.platform_number,
+                            Flags = apiDeparture.flags
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Trace.TraceError("GetDepartureAsync Exception: {0}", e.Message);
+                    }
                 }
             }
 
-            // Return the current or next run of departures.
-            return currentRuns.First().Departures;
+            // Order by route name.
+            departures = departures.OrderBy(d => d.ScheduledDeparture).ToList();
+
+            // Filter out past departures.
+            departures = departures.Where(d => d.ScheduledDeparture >= DateTime.Now).ToList();
+
+            // Return the next scheduled departure.
+            nextDeparture = departures.First();
+
+            return nextDeparture;
         }
+
 
         /// <summary>
         /// Generic PTV API Get Request function.

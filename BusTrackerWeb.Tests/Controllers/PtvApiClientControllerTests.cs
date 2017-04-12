@@ -62,15 +62,17 @@ namespace BusTrackerWeb.Controllers.Models.Tests
             Assert.IsTrue(stops.Count == 52);
         }
 
+
         [TestMethod()]
-        public async Task GetCurrentRunDeparturesAsyncTest()
+        public async Task GetStopDepartureAsyncTest()
         {
             PtvApiClientController apiControl = new PtvApiClientController();
             RouteModel route = new RouteModel { RouteId = 10846 };
+            StopModel stop = new StopModel { StopId = 27930 };
 
-            List<RunDeparture> currentDepartures = await apiControl.GetCurrentRunDeparturesAsync(route);
+            DepartureModel nextDeparture = await apiControl.GetStopDepartureAsync(stop, route);
 
-            Assert.IsNotNull(currentDepartures);
+            Assert.Fail();
         }
     }
 }

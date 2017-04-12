@@ -166,6 +166,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BusModel.cs" />
+    <Compile Include="Models\DepartureModel.cs" />
+    <Compile Include="Models\DirectionModel.cs" />
+    <Compile Include="Models\PtvApiDirection.cs" />
+    <Compile Include="Models\PtvApiDeparturesResponse.cs" />
     <Compile Include="Models\RunDeparture.cs" />
     <Compile Include="Models\PtvApiDisruptionRoute.cs" />
     <Compile Include="Models\PtvApiDisruptionDirection.cs" />
