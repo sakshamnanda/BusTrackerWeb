@@ -12,11 +12,11 @@ namespace BusTrackerWeb.Models
     {
         public StopModel Stop { get; set; }
 
-        public RouteModel Route { get; set; }
+        public int RouteId { get; set; }
 
         public int RunId { get; set; }
 
-        public DirectionModel Direction { get; set; }
+        public int DirectionId { get; set; }
 
         public List<int> Disruptions { get; set; }
 

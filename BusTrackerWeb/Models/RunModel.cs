@@ -16,6 +16,8 @@ namespace BusTrackerWeb.Models
 
         public StopModel FinalStop { get; set; }
 
+        public DirectionModel Direction { get; set; }
+
         public StoppingPatternModel StoppingPattern { get; set; }
     }
 }

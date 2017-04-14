@@ -58,7 +58,8 @@ namespace BusTrackerWeb.Controllers
                         {
                             RouteId = apiRoute.route_id,
                             RouteName = apiRoute.route_name,
-                            RouteNumber = apiRoute.route_number
+                            RouteNumber = apiRoute.route_number,
+                            RouteType = apiRoute.route_type
                         });
                     }
                     catch (Exception e)
@@ -123,8 +124,6 @@ namespace BusTrackerWeb.Controllers
 
                     direction.DirectionId = apiDirection.direction_id;
                     direction.DirectionName = apiDirection.direction_name;
-                    direction.Route = route;
-                    direction.RouteType = apiDirection.route_type;
                 }
                 catch (Exception e)
                 {
@@ -159,9 +158,7 @@ namespace BusTrackerWeb.Controllers
                         directions.Add(new DirectionModel
                         {
                             DirectionId = apiDirection.direction_id,
-                            DirectionName = apiDirection.direction_name,
-                            Route = route,
-                            RouteType = apiDirection.route_type
+                            DirectionName = apiDirection.direction_name
                         });
                     }
                     catch (Exception e)
@@ -222,8 +219,6 @@ namespace BusTrackerWeb.Controllers
         /// <returns>PTV API Runs Response.</returns>
         public async Task<List<RunModel>> GetRouteRunsAsync(RouteModel route)
         {
-            const int MAX_RUNS_TAKEN = 48; 
-
             // Get all stops on a run.
             List<StopModel> stops = await GetRouteStopsAsync(route);
             
@@ -252,7 +247,7 @@ namespace BusTrackerWeb.Controllers
                     }
                 }
 
-                runs = runs.OrderByDescending(r => r.RunId).Take(MAX_RUNS_TAKEN).ToList();
+                runs = runs.OrderByDescending(r => r.RunId).ToList();
             }
 
             return runs;
@@ -289,10 +284,10 @@ namespace BusTrackerWeb.Controllers
                     foreach(PtvApiDeparture apiDeparture in patternResponse.Departures)
                     {
                         departures.Add(new DepartureModel {
-                            Stop = new StopModel { StopId = apiDeparture.stop_id },
-                            Route = new RouteModel { RouteId = apiDeparture.route_id },
+                            Stop = stops.Single(s => s.StopId == apiDeparture.stop_id),
+                            RouteId = apiDeparture.route_id,
                             RunId = apiDeparture.run_id,
-                            Direction = new DirectionModel { DirectionId = apiDeparture.direction_id },
+                            DirectionId = apiDeparture.direction_id,
                             Disruptions = apiDeparture.disruption_ids,
                             ScheduledDeparture = DateTime.Parse(apiDeparture.scheduled_departure_utc, null, DateTimeStyles.AssumeLocal),
                             AtPlatform = apiDeparture.at_platform,
@@ -327,69 +322,6 @@ namespace BusTrackerWeb.Controllers
             }
 
             return stoppingPattern;
-        }
-
-        /// <summary>
-        /// Get all bus routes from the PTV API.
-        /// </summary>
-        /// <returns>Bus Route collection.</returns>
-        public async Task<DepartureModel> GetStopDepartureAsync(StopModel stop, RouteModel route, DirectionModel direction)
-        {
-            List<DepartureModel> departures = new List<DepartureModel>();
-            DepartureModel nextDeparture = new DepartureModel();
-
-            // Get all departures for a route stop.
-            string getDeparturesRequest =  
-                string.Format("/v3/departures/route_type/2/stop/{0}/route/{1}", stop.StopId, 
-                route.RouteId);
-
-            PtvApiDeparturesResponse departuresResponse =
-                await GetPtvApiResponse<PtvApiDeparturesResponse>(getDeparturesRequest);
-
-
-            // If the response is healthy try to convert the API response to a route collection.
-            if (departuresResponse.Status.Health == 1)
-            {
-                // Filter required direction.
-                departuresResponse.Departures = departuresResponse.Departures.Where(d => d.direction_id == direction.DirectionId).ToList();
-
-                foreach (PtvApiDeparture apiDeparture in departuresResponse.Departures)
-                {
-                    try
-                    {
-                        departures.Add(new DepartureModel
-                        {
-                            Stop = stop,
-                            Route = route,
-                            RunId = apiDeparture.run_id,
-                            Direction = direction,
-                            Disruptions = apiDeparture.disruption_ids,
-                            ScheduledDeparture = DateTime.Parse(apiDeparture.scheduled_departure_utc, null, DateTimeStyles.AssumeLocal),
-                            AtPlatform = apiDeparture.at_platform,
-                            PlatformNumber = apiDeparture.platform_number,
-                            Flags = apiDeparture.flags
-                        });
-                    } 
-                    catch (Exception e)
-                    {
-                        System.Diagnostics.Trace.TraceError("GetDepartureAsync Exception: {0}", e.Message);
-                    }
-                }
-            }
-
-            // Order by route name.
-            departures = departures.OrderBy(d => d.ScheduledDeparture).ToList();
-
-            // Filter out past departures.
-            departures = departures.Where(d => d.ScheduledDeparture >= DateTime.Now).ToList();
-
-            // Return the next scheduled departure.
-            if (departures.Count != 0)
-            {
-                nextDeparture = departures.First();
-            }
-
-            return nextDeparture;
         }
 
 

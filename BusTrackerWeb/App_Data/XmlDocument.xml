@@ -559,12 +559,6 @@
             </summary>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStopDepartureAsync(BusTrackerWeb.Models.StopModel,BusTrackerWeb.Models.RouteModel,BusTrackerWeb.Models.DirectionModel)">
-            <summary>
-            Get all bus routes from the PTV API.
-            </summary>
-            <returns>Bus Route collection.</returns>
-        </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetPtvApiResponse``1(System.String)">
             <summary>
             Generic PTV API Get Request function.

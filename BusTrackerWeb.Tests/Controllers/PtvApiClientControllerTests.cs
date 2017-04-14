@@ -53,20 +53,6 @@ namespace BusTrackerWeb.Controllers.Tests
 
 
         [TestMethod()]
-        public async Task GetStopDepartureAsyncTest()
-        {
-            PtvApiClientController apiControl = new PtvApiClientController();
-            RouteModel route = new RouteModel { RouteId = 10846 };
-            StopModel stop = new StopModel { StopId = 27930 };
-            DirectionModel direction = new DirectionModel { DirectionId = 8 };
-
-            DepartureModel nextDeparture = await apiControl.GetStopDepartureAsync(stop, route, direction);
-
-            Assert.IsNotNull(nextDeparture);
-            Assert.IsTrue(nextDeparture.ScheduledDeparture >= DateTime.Now);
-        }
-
-        [TestMethod()]
         public async Task GetRouteDirectionsAsyncTest()
         {
             PtvApiClientController apiControl = new PtvApiClientController();
