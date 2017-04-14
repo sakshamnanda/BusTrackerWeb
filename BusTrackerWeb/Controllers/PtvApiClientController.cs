@@ -105,32 +105,32 @@ namespace BusTrackerWeb.Controllers
             return route;
         }
 
-        public async Task<DirectionModel> GetDirectionAsync(int directionId)
+        public async Task<DirectionModel> GetDirectionAsync(int directionId, RouteModel route)
         {
             DirectionModel direction = new DirectionModel();
 
             // Get all bus type routes.
-            string getDirectionRequest = string.Format("GET /v3/directions/{0}", directionId);
-            PtvApiDirectionResponse directionResponse =
-                await GetPtvApiResponse<PtvApiDirectionResponse>(getDirectionRequest);
+            string getDirectionsRequest = string.Format("/v3/directions/{0}/route_type/2", directionId);
+            PtvApiDirectionsResponse directionsResponse =
+                await GetPtvApiResponse<PtvApiDirectionsResponse>(getDirectionsRequest);
 
             // If the response is healthy try to convert the API response to a direction.
-            if (directionResponse.Status.Health == 1)
+            if (directionsResponse.Status.Health == 1)
             {
                 try
                 {
-                    direction = new DirectionModel
-                    {
-                        DirectionId = directionResponse.Direction.direction_id,
-                        DirectionName = directionResponse.Direction.direction_name,
-                        Route = new RouteModel { RouteId = directionResponse.Direction.route_id },
-                        RouteType = directionResponse.Direction.route_type
-                    };
+                    PtvApiDirection apiDirection = directionsResponse.Directions.First(d => d.route_id == route.RouteId);
+
+                    direction.DirectionId = apiDirection.direction_id;
+                    direction.DirectionName = apiDirection.direction_name;
+                    direction.Route = route;
+                    direction.RouteType = apiDirection.route_type;
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Trace.TraceError("GetDirectionAsync Exception: {0}", e.Message);
+                    System.Diagnostics.Trace.TraceError("GetRouteDirectionAsync Exception: {0}", e.Message);
                 }
+
             }
 
             return direction;

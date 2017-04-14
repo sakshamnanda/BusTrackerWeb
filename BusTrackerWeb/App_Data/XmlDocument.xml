@@ -611,6 +611,12 @@
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiDirectionResponse">
+            <summary>
+            PTV API Direction Response Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
         <member name="T:BusTrackerWeb.Models.PtvApiDirectionsResponse">
             <summary>
             PTV API Directions Response Model, Refer:
