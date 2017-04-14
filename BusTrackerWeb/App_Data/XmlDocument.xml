@@ -553,13 +553,13 @@
             </summary>
             <returns>PTV API Runs Response.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRunDeparturesAsync(BusTrackerWeb.Models.RunModel)">
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStoppingPatternAsync(BusTrackerWeb.Models.RunModel)">
             <summary>
             Get the departures for a specific run from the PTV API.
             </summary>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStopDepartureAsync(BusTrackerWeb.Models.StopModel,BusTrackerWeb.Models.RouteModel)">
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStopDepartureAsync(BusTrackerWeb.Models.StopModel,BusTrackerWeb.Models.RouteModel,BusTrackerWeb.Models.DirectionModel)">
             <summary>
             Get all bus routes from the PTV API.
             </summary>
@@ -623,10 +623,20 @@
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>
+        <member name="T:BusTrackerWeb.Models.DisruptionModel">
+            <summary>
+            Bus Tracker Disruption Model, Refer:
+            </summary>
+        </member>
         <member name="T:BusTrackerWeb.Models.PtvApiRouteResponse">
             <summary>
             PTV API Route Response Model, Refer:
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.StoppingPatternModel">
+            <summary>
+            Bus Tracker Stopping Pattern Model, Refer:
             </summary>
         </member>
         <member name="T:BusTrackerWeb.Models.PtvApiDisruptionRoute">

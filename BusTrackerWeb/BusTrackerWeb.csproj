@@ -172,7 +172,9 @@
     <Compile Include="Models\PtvApiDeparturesResponse.cs" />
     <Compile Include="Models\PtvApiDirectionResponse.cs" />
     <Compile Include="Models\PtvApiDirectionsResponse.cs" />
+    <Compile Include="Models\DisruptionModel.cs" />
     <Compile Include="Models\PtvApiRouteResponse.cs" />
+    <Compile Include="Models\StoppingPatternModel.cs" />
     <Compile Include="Models\RunDeparture.cs" />
     <Compile Include="Models\PtvApiDisruptionRoute.cs" />
     <Compile Include="Models\PtvApiDisruptionDirection.cs" />

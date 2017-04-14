@@ -14,7 +14,7 @@ namespace BusTrackerWeb.Models
 
         public RouteModel Route { get; set; }
 
-        public RunModel Run { get; set; }
+        public int RunId { get; set; }
 
         public DirectionModel Direction { get; set; }
 

@@ -62,23 +62,27 @@ namespace BusTrackerWeb.Controllers
             // Get the route.
             RouteModel route = await WebApiApplication.PtvApiControl.GetRouteAsync(routeId);
 
-            // Get route directions.
-            
+            // Get route direction.
+            DirectionModel direction = await WebApiApplication.PtvApiControl.GetDirectionAsync(directionId, route);
 
-            // Get all stops for a given route.
-            List<StopModel> stops = await WebApiApplication.PtvApiControl.GetRouteStopsAsync(route);
+            // Get all runs for a route.
+            List<RunModel> runs = await WebApiApplication.PtvApiControl.GetRouteRunsAsync(route);
 
-            // Get next departure for each stop along route.
-            List<DepartureModel> departures = new List<DepartureModel>();
-            foreach(StopModel stop in stops)
+            // Get the stopping pattern for each run.
+            foreach (RunModel run in runs)
             {
-                departures.Add(await WebApiApplication.PtvApiControl.GetStopDepartureAsync(stop, route));
+                run.StoppingPattern = await WebApiApplication.PtvApiControl.GetStoppingPatternAsync(run);
             }
+            
+            // Filter runs by direction.
+            runs = runs.Where(r => r.StoppingPattern.Departures.First().Direction.DirectionId == directionId).ToList();
 
-            // Order departures by time.
-            departures = departures.OrderBy(d => d.ScheduledDeparture).ToList();
+            // Find the run that has the next departure from last stop, this is the current run.
+            RunModel nextRun = runs.OrderBy(r => r.StoppingPattern.Departures.Last().ScheduledDeparture).First();
 
-            return departures;
+            // Return the departures for the current run.
+
+            return nextRun.StoppingPattern.Departures;
         }
 
     }

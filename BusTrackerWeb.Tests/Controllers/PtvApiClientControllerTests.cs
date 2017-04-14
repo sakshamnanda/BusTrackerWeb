@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusTrackerWeb.Models;
 
+
 namespace BusTrackerWeb.Controllers.Tests
 {
     [TestClass()]
@@ -38,18 +39,6 @@ namespace BusTrackerWeb.Controllers.Tests
             Assert.IsNotNull(runs.Count != 0);
         }
 
-        [TestMethod()]
-        public async Task GetRoutePatternAsyncTest()
-        {
-            PtvApiClientController apiControl = new PtvApiClientController();
-            RouteModel route = new RouteModel { RouteId = 10846 };
-            List<RunModel> runs = await apiControl.GetRouteRunsAsync(route);
-
-
-            List<RunDeparture> departures = await apiControl.GetRunDeparturesAsync(runs.Last());
-
-            Assert.IsTrue(departures.Count == 34);
-        }
 
         [TestMethod()]
         public async Task GetRouteStopsAsyncTest()
@@ -69,8 +58,9 @@ namespace BusTrackerWeb.Controllers.Tests
             PtvApiClientController apiControl = new PtvApiClientController();
             RouteModel route = new RouteModel { RouteId = 10846 };
             StopModel stop = new StopModel { StopId = 27930 };
+            DirectionModel direction = new DirectionModel { DirectionId = 8 };
 
-            DepartureModel nextDeparture = await apiControl.GetStopDepartureAsync(stop, route);
+            DepartureModel nextDeparture = await apiControl.GetStopDepartureAsync(stop, route, direction);
 
             Assert.IsNotNull(nextDeparture);
             Assert.IsTrue(nextDeparture.ScheduledDeparture >= DateTime.Now);
@@ -106,6 +96,18 @@ namespace BusTrackerWeb.Controllers.Tests
             DirectionModel direction = await apiControl.GetDirectionAsync(8, route);
 
             Assert.IsTrue(direction.DirectionName == "Deakin University");
+        }
+
+        [TestMethod()]
+        public async Task GetRunPatternAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+            RunModel run = new RunModel { RunId = 94095 };
+            run.Route = new RouteModel { RouteId = 10846 };
+
+            StoppingPatternModel pattern = await apiControl.GetStoppingPatternAsync(run);
+
+            Assert.IsTrue(pattern.Departures.Count != 0);
         }
     }
 }
