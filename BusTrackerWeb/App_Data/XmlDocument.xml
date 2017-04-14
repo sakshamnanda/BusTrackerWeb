@@ -535,6 +535,12 @@
             </summary>
             <returns>Bus Route collection.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteDirectionsAsync(BusTrackerWeb.Models.RouteModel)">
+            <summary>
+            Get all bus routes from the PTV API.
+            </summary>
+            <returns>Bus Route collection.</returns>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteStopsAsync(BusTrackerWeb.Models.RouteModel)">
             <summary>
             Get the stops for a route from the PTV API.
@@ -602,6 +608,12 @@
         <member name="T:BusTrackerWeb.Models.PtvApiDeparturesResponse">
             <summary>
             PTV API Departures Response Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiDirectionsResponse">
+            <summary>
+            PTV API Directions Response Model, Refer:
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>

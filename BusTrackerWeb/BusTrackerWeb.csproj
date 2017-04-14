@@ -170,6 +170,7 @@
     <Compile Include="Models\DirectionModel.cs" />
     <Compile Include="Models\PtvApiDirection.cs" />
     <Compile Include="Models\PtvApiDeparturesResponse.cs" />
+    <Compile Include="Models\PtvApiDirectionsResponse.cs" />
     <Compile Include="Models\RunDeparture.cs" />
     <Compile Include="Models\PtvApiDisruptionRoute.cs" />
     <Compile Include="Models\PtvApiDisruptionDirection.cs" />

@@ -24,6 +24,18 @@ namespace BusTrackerWeb.Controllers
             return await WebApiApplication.PtvApiControl.GetRoutesAsync();
         }
 
+        [ActionName("GetRouteDirections")]
+        public async Task<List<DirectionModel>> GetRouteDirections(int routeId)
+        {
+            // Create a new route.
+            RouteModel route = new RouteModel { RouteId = routeId };
+
+            // Get all stops for a given route.
+            List<DirectionModel> directions = await WebApiApplication.PtvApiControl.GetRouteDirectionsAsync(route);
+
+            return directions;
+        }
+
         [ActionName("GetRouteNextDeparture")]
         public async Task<List<DepartureModel>> GetRouteNextDeparture(int routeId)
         {

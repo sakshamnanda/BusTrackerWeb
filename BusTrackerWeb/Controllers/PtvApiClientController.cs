@@ -75,6 +75,48 @@ namespace BusTrackerWeb.Controllers
         }
 
         /// <summary>
+        /// Get all bus routes from the PTV API.
+        /// </summary>
+        /// <returns>Bus Route collection.</returns>
+        public async Task<List<DirectionModel>> GetRouteDirectionsAsync(RouteModel route)
+        {
+            List<DirectionModel> directions = new List<DirectionModel>();
+
+            // Get all route directions.
+            string getDirectionsRequest = string.Format("/v3/directions/route/{0}", route.RouteId);
+            PtvApiDirectionsResponse directionsResponse =
+                await GetPtvApiResponse<PtvApiDirectionsResponse>(getDirectionsRequest);
+
+            // If the response is healthy try to convert the API response to a direction collection.
+            if (directionsResponse.Status.Health == 1)
+            {
+                foreach (PtvApiDirection apiDirection in directionsResponse.Directions)
+                {
+                    try
+                    {
+                        directions.Add(new DirectionModel
+                        {
+                            DirectionId = apiDirection.direction_id,
+                            DirectionName = apiDirection.direction_name,
+                            Route = route,
+                            RouteType = apiDirection.route_type
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Trace.TraceError("GetRouteDirectionsAsync Exception: {0}", e.Message);
+                    }
+                }
+            }
+
+            // Order by route name.
+            directions = directions.OrderBy(r => r.DirectionName).ToList();
+
+            return directions;
+        }
+
+
+        /// <summary>
         /// Get the stops for a route from the PTV API.
         /// </summary>
         /// <returns>PTV API Stopping Pattern.</returns>

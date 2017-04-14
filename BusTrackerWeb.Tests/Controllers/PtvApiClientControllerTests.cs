@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusTrackerWeb.Models;
 
-namespace BusTrackerWeb.Controllers.Models.Tests
+namespace BusTrackerWeb.Controllers.Tests
 {
     [TestClass()]
     public class PtvApiClientControllerTests
@@ -75,5 +75,17 @@ namespace BusTrackerWeb.Controllers.Models.Tests
             Assert.IsNotNull(nextDeparture);
             Assert.IsTrue(nextDeparture.ScheduledDeparture >= DateTime.Now);
         }
+
+        [TestMethod()]
+        public async Task GetRouteDirectionsAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+            RouteModel route = new RouteModel { RouteId = 10846 };
+
+            List<DirectionModel> directions = await apiControl.GetRouteDirectionsAsync(route);
+
+            Assert.IsNotNull(directions.Count == 2);
+        }
+
     }
 }
