@@ -72,7 +72,8 @@ namespace BusTrackerWeb.Controllers.Models.Tests
 
             DepartureModel nextDeparture = await apiControl.GetStopDepartureAsync(stop, route);
 
-            Assert.Fail();
+            Assert.IsNotNull(nextDeparture);
+            Assert.IsTrue(nextDeparture.ScheduledDeparture >= DateTime.Now);
         }
     }
 }
