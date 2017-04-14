@@ -6,15 +6,13 @@ using System.Web;
 namespace BusTrackerWeb.Models
 {
     /// <summary>
-    /// PTV API Route Response Model, Refer:
+    /// PTV API Direction Response Model, Refer:
     /// http://timetableapi.ptv.vic.gov.au/swagger/ui/index
     /// </summary>
-    public class PtvApiRouteResponse
+    public class PtvApiDirectionResponse
     {
-        public PtvApiRoute Route { get; set; }
+        public PtvApiDirection Direction { get; set; }
 
         public PtvApiStatus Status { get ; set; }
-
-        public int route_type { get; set; }
     }
 }

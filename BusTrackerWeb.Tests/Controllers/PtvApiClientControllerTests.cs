@@ -84,8 +84,27 @@ namespace BusTrackerWeb.Controllers.Tests
 
             List<DirectionModel> directions = await apiControl.GetRouteDirectionsAsync(route);
 
-            Assert.IsNotNull(directions.Count == 2);
+            Assert.IsTrue(directions.Count == 2);
         }
 
+        [TestMethod()]
+        public async Task GetRouteAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+
+            RouteModel route = await apiControl.GetRouteAsync(10846);
+
+            Assert.IsTrue(route.RouteName == "Geelong Station - Deakin University via Grovedale");
+        }
+
+        [TestMethod()]
+        public void GetDirectionAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+
+            RouteModel route = await apiControl.GetDirectionAsync(8);
+
+            Assert.IsTrue(route.RouteName == "Geelong Station - Deakin University via Grovedale");
+        }
     }
 }

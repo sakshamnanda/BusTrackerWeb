@@ -43,9 +43,9 @@ namespace BusTrackerWeb.Controllers
             List<RouteModel> routes = new List<RouteModel>();
 
             // Get all bus type routes.
-            string getRoutesRequest = @"/v3/routes?route_types=2";
-            PtvApiRouteResponse routeResponse = 
-                await GetPtvApiResponse<PtvApiRouteResponse>(getRoutesRequest);
+            string getRoutesRequest = string.Format("/v3/routes?route_types=2");
+            PtvApiRoutesResponse routeResponse = 
+                await GetPtvApiResponse<PtvApiRoutesResponse>(getRoutesRequest);
 
             // If the response is healthy try to convert the API response to a route collection.
             if(routeResponse.Status.Health == 1)
@@ -72,6 +72,68 @@ namespace BusTrackerWeb.Controllers
             routes = routes.OrderBy(r => r.RouteName).ToList();
                 
             return routes;
+        }
+
+        public async Task<RouteModel> GetRouteAsync(int routeId)
+        {
+            RouteModel route = new RouteModel();
+
+            // Get all bus type routes.
+            string getRouteRequest = string.Format("/v3/routes/{0}", routeId);
+            PtvApiRouteResponse routeResponse =
+                await GetPtvApiResponse<PtvApiRouteResponse>(getRouteRequest);
+
+            // If the response is healthy try to convert the API response to a route.
+            if (routeResponse.Status.Health == 1)
+            {
+                try
+                {
+                    route = new RouteModel
+                    {
+                        RouteId = routeResponse.Route.route_id,
+                        RouteName = routeResponse.Route.route_name,
+                        RouteNumber = routeResponse.Route.route_number,
+                        RouteType = routeResponse.Route.route_type
+                    };
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Trace.TraceError("GetRouteAsync Exception: {0}", e.Message);
+                }
+            }
+
+            return route;
+        }
+
+        public async Task<DirectionModel> GetDirectionAsync(int directionId)
+        {
+            DirectionModel direction = new DirectionModel();
+
+            // Get all bus type routes.
+            string getDirectionRequest = string.Format("GET /v3/directions/{0}", directionId);
+            PtvApiDirectionResponse directionResponse =
+                await GetPtvApiResponse<PtvApiDirectionResponse>(getDirectionRequest);
+
+            // If the response is healthy try to convert the API response to a direction.
+            if (directionResponse.Status.Health == 1)
+            {
+                try
+                {
+                    direction = new DirectionModel
+                    {
+                        DirectionId = directionResponse.Direction.direction_id,
+                        DirectionName = directionResponse.Direction.direction_name,
+                        Route = new RouteModel { RouteId = directionResponse.Direction.route_id },
+                        RouteType = directionResponse.Direction.route_type
+                    };
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Trace.TraceError("GetDirectionAsync Exception: {0}", e.Message);
+                }
+            }
+
+            return direction;
         }
 
         /// <summary>

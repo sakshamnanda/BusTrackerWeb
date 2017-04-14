@@ -170,7 +170,9 @@
     <Compile Include="Models\DirectionModel.cs" />
     <Compile Include="Models\PtvApiDirection.cs" />
     <Compile Include="Models\PtvApiDeparturesResponse.cs" />
+    <Compile Include="Models\PtvApiDirectionResponse.cs" />
     <Compile Include="Models\PtvApiDirectionsResponse.cs" />
+    <Compile Include="Models\PtvApiRouteResponse.cs" />
     <Compile Include="Models\RunDeparture.cs" />
     <Compile Include="Models\PtvApiDisruptionRoute.cs" />
     <Compile Include="Models\PtvApiDisruptionDirection.cs" />
@@ -183,7 +185,7 @@
     <Compile Include="Models\PtvApiRoute.cs" />
     <Compile Include="Models\PtvApiRun.cs" />
     <Compile Include="Models\PtvApiRunResponse.cs" />
-    <Compile Include="Models\PtvApiRouteResponse.cs" />
+    <Compile Include="Models\PtvApiRoutesResponse.cs" />
     <Compile Include="Models\PtvApiSignerModel.cs" />
     <Compile Include="Models\PtvApiDeparture.cs" />
     <Compile Include="Models\PtvApiStatus.cs" />
