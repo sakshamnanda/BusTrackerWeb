@@ -574,9 +574,31 @@
         </member>
         <member name="M:BusTrackerWeb.Controllers.RouteController.GetRoutes">
             <summary>
-            Get a collection of bus routes.
+            Get a list of all PTV bus routes.
             </summary>
-            <returns>An array of bus route objects.</returns>
+            <returns>An array of RouteModel objects.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.RouteController.GetRoute(System.Int32)">
+            <summary>
+            Get a specific PTV bus route.
+            </summary>
+            <param name="routeId">PTV Bus Route Id.</param>
+            <returns>A RouteModel object.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.RouteController.GetRouteDirections(System.Int32)">
+            <summary>
+            Get a list of PTV directions for a specific route.
+            </summary>
+            <param name="routeId">PTV Bus Route Id.</param>
+            <returns>An array of DirectionModel objects.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.RouteController.GetRouteNextRun(System.Int32,System.Int32)">
+            <summary>
+            Get the next PTV run scheduled for specific route and direction.
+            </summary>
+            <param name="routeId">PTV Bus Route Id.</param>
+            <param name="directionId">PTV Direction Id.</param>
+            <returns>A RunModel object.</returns>
         </member>
         <member name="T:BusTrackerWeb.Models.BusModel">
             <summary>
