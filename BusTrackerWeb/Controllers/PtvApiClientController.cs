@@ -1,6 +1,7 @@
 ﻿using BusTrackerWeb.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -64,7 +65,7 @@ namespace BusTrackerWeb.Controllers
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Trace.TraceError("GetRoutesAsync Exception: {0}", e.Message);
+                        Trace.TraceError("GetRoutesAsync Exception: {0}", e.Message);
                     }
                 }
             }
@@ -127,7 +128,7 @@ namespace BusTrackerWeb.Controllers
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Trace.TraceError("GetRouteDirectionAsync Exception: {0}", e.Message);
+                    Trace.TraceError("GetRouteDirectionAsync Exception: {0}", e.Message);
                 }
 
             }
@@ -163,7 +164,7 @@ namespace BusTrackerWeb.Controllers
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Trace.TraceError("GetRouteDirectionsAsync Exception: {0}", e.Message);
+                        Trace.TraceError("GetRouteDirectionsAsync Exception: {0}", e.Message);
                     }
                 }
             }
@@ -205,7 +206,7 @@ namespace BusTrackerWeb.Controllers
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Trace.TraceError("GetRouteStopsAsync Exception: {0}", e.Message);
+                        Trace.TraceError("GetRouteStopsAsync Exception: {0}", e.Message);
                     }
                 }
             }
@@ -243,7 +244,7 @@ namespace BusTrackerWeb.Controllers
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Trace.TraceError("GetRouteRunsAsync Exception: {0}", e.Message);
+                        Trace.TraceError("GetRouteRunsAsync Exception: {0}", e.Message);
                     }
                 }
 
@@ -315,7 +316,7 @@ namespace BusTrackerWeb.Controllers
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Trace.TraceError("GetRunPatternAsync Exception: {0}", e.Message);
+                    Trace.TraceError("GetRunPatternAsync Exception: {0}", e.Message);
                 }
             }
 
@@ -349,7 +350,7 @@ namespace BusTrackerWeb.Controllers
             }
             catch (Exception e)
             {
-                System.Diagnostics.Trace.TraceError("GetPtvApiResponse Exception: {0}", e.Message);
+                Trace.TraceError("GetPtvApiResponse Exception: {0}", e.Message);
             }
 
             return response;

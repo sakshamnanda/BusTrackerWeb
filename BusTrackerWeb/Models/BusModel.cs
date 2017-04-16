@@ -12,11 +12,6 @@ namespace BusTrackerWeb.Models
     public class BusModel
     {
         /// <summary>
-        /// The Bus Tracker ID allocated to the bus.
-        /// </summary>
-        public int BusId { get; set; }
-
-        /// <summary>
         /// The bus road registration number.
         /// </summary>
         public string BusRegoNumber { get; set; }
@@ -36,5 +31,11 @@ namespace BusTrackerWeb.Models
         /// The bus's previous stop.
         /// </summary>
         public int BusPreviousStopId { get; set; }
+
+        /// <summary>
+        /// The PTV Route Id of the current run.
+        /// </summary>
+        public int RouteId { get; set; }
+
     }
 }
