@@ -7,7 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BusTrackerWeb.Models;
 
-namespace BusTrackerWeb.Controllers.Models.Tests
+
+namespace BusTrackerWeb.Controllers.Tests
 {
     [TestClass()]
     public class PtvApiClientControllerTests
@@ -31,35 +32,68 @@ namespace BusTrackerWeb.Controllers.Models.Tests
         public async Task GetRouteRunsAsyncTest()
         {
             PtvApiClientController apiControl = new PtvApiClientController();
+            RouteModel route = new RouteModel { RouteId = 10846 };
 
-            PtvApiRunResponse response = await apiControl.GetRouteRunsAsync(10846);
+            List<RunModel> runs = await apiControl.GetRouteRunsAsync(route);
 
-            PtvApiRun testRun = response.Runs.OrderByDescending(r => r.run_id).First();
-
-            Assert.IsNotNull(testRun);
-            Assert.IsTrue(response.Status.Health == 1);
+            Assert.IsNotNull(runs.Count != 0);
         }
 
-        [TestMethod()]
-        public async Task GetRoutePatternAsyncTest()
-        {
-            PtvApiClientController apiControl = new PtvApiClientController();
-
-            PtvApiStoppingPattern response = await apiControl.GetRoutePatternAsync(80843);
-
-            Assert.IsTrue(response.Departures.Count == 36);
-            Assert.IsTrue(response.Status.Health == 1);
-        }
 
         [TestMethod()]
         public async Task GetRouteStopsAsyncTest()
         {
             PtvApiClientController apiControl = new PtvApiClientController();
+            RouteModel route = new RouteModel { RouteId = 10846 };
 
-            PtvApiStopOnRouteResponse response = await apiControl.GetRouteStopsAsync(10846);
+            List<StopModel> stops = await apiControl.GetRouteStopsAsync(route);
 
-            Assert.IsTrue(response.Stops.Count == 52);
-            Assert.IsTrue(response.Status.Health == 1);
+            Assert.IsTrue(stops.Count == 52);
+        }
+
+
+        [TestMethod()]
+        public async Task GetRouteDirectionsAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+            RouteModel route = new RouteModel { RouteId = 10846 };
+
+            List<DirectionModel> directions = await apiControl.GetRouteDirectionsAsync(route);
+
+            Assert.IsTrue(directions.Count == 2);
+        }
+
+        [TestMethod()]
+        public async Task GetRouteAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+
+            RouteModel route = await apiControl.GetRouteAsync(10846);
+
+            Assert.IsTrue(route.RouteName == "Geelong Station - Deakin University via Grovedale");
+        }
+
+        [TestMethod()]
+        public async Task GetDirectionAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+            RouteModel route = new RouteModel { RouteId = 10846 };
+
+            DirectionModel direction = await apiControl.GetDirectionAsync(8, route);
+
+            Assert.IsTrue(direction.DirectionName == "Deakin University");
+        }
+
+        [TestMethod()]
+        public async Task GetRunPatternAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+            RunModel run = new RunModel { RunId = 94095 };
+            run.Route = new RouteModel { RouteId = 10846 };
+
+            StoppingPatternModel pattern = await apiControl.GetStoppingPatternAsync(run);
+
+            Assert.IsTrue(pattern.Departures.Count != 0);
         }
     }
 }
