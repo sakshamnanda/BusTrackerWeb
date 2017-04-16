@@ -22,7 +22,7 @@ namespace BusTrackerWeb.Models
         public string BusRegoNumber { get; set; }
 
         /// <summary>
-        /// The current GPS lonitude of the bus.
+        /// The current GPS longitude of the bus.
         /// </summary>
         public decimal BusLongitude { get; set; }
 

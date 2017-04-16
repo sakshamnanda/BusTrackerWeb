@@ -16,7 +16,7 @@ namespace BusTrackerWeb.Models
         public int DirectionId { get; set; }
 
         /// <summary>
-        /// The Bus's direction of travel i.e. the last stop.
+        /// The bus's direction of travel i.e. generally the last stop of the route.
         /// </summary>
         public string DirectionName { get; set; }
     }
