@@ -58,33 +58,37 @@ namespace BusTrackerWeb.Controllers
 
             // Get the stopping pattern for each run and find the current runs for this direction.
             List<RunModel> currentRuns = new List<RunModel>();
-            DateTime currentLastStopTime = DateTime.Now.AddMinutes(1);
+
+            // Initialise the sentinal with the last stop time of the last run.
+            bool previousRunInPast = false;
             foreach (RunModel run in routeRuns)
             {
-                // Don't continue if the last run was in the past.
-                if (currentLastStopTime > DateTime.Now)
+                // Skip this run if the previous run was in the past.
+                if (!previousRunInPast)
                 {
                     run.StoppingPattern = await WebApiApplication.PtvApiControl.GetStoppingPatternAsync(run);
 
+                    // Check the current run for sentinals.
+                    DateTime runLastStoptime = run.StoppingPattern.Departures.Last().ScheduledDeparture;
+                    int runDirectionId = run.StoppingPattern.Departures.Last().DirectionId;
+
                     // Update direction property for relevant runs.
-                    if (run.StoppingPattern.Departures.Last().DirectionId == directionId)
+                    if ((runDirectionId == directionId) && (runLastStoptime > DateTime.Now))
                     {
                         run.Direction = direction;
                         currentRuns.Add(run);
-
-                        // Update the last stop time sentinal for this direction.
-                        currentLastStopTime = run.StoppingPattern.Departures.Last().ScheduledDeparture;
+                    }
+                    else
+                    {
+                        previousRunInPast = true;
                     }
                 }
             }
 
-            // Filter runs by direction.
-            currentRuns = currentRuns.Where(r => r.StoppingPattern.Departures.First().DirectionId == directionId).ToList();
-
             // Find the run that has the next departure from last stop, this is the current run.
             currentRuns = currentRuns.OrderBy(r => r.StoppingPattern.Departures.Last().ScheduledDeparture).ToList();
-
-            nextRun = currentRuns.Last();
+             
+            nextRun = currentRuns.First();
 
             return nextRun;
         }
