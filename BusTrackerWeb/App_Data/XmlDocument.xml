@@ -501,12 +501,19 @@
             Controls all Bus Tracker API Bus action requests.
             </summary>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.BusController.PutBusLocation(BusTrackerWeb.Models.BusModel)">
+        <member name="M:BusTrackerWeb.Controllers.BusController.PutBusOnRouteLocation(BusTrackerWeb.Models.BusModel)">
             <summary>
             Update the longitude and latitude of a bus.
             </summary>
             <param name="bus">The bus object to be updated.</param>
             <returns>200 if updated.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.BusController.GetBusOnRouteLocation(System.Int32)">
+            <summary>
+            Get all buses that are curretly on the defined route.
+            </summary>
+            <param name="routeId">The PTV Route Id of the buses to be returned.</param>
+            <returns>A collection of Bus Model objects.</returns>
         </member>
         <member name="T:BusTrackerWeb.Controllers.HomeController">
             <summary>
@@ -535,21 +542,27 @@
             </summary>
             <returns>Bus Route collection.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteRunsAsync(System.Int32)">
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteDirectionsAsync(BusTrackerWeb.Models.RouteModel)">
+            <summary>
+            Get all bus routes from the PTV API.
+            </summary>
+            <returns>Bus Route collection.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteStopsAsync(BusTrackerWeb.Models.RouteModel)">
+            <summary>
+            Get the stops for a route from the PTV API.
+            </summary>
+            <returns>PTV API Stopping Pattern.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteRunsAsync(BusTrackerWeb.Models.RouteModel)">
             <summary>
             Get all route runs from the PTV API.
             </summary>
             <returns>PTV API Runs Response.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRoutePatternAsync(System.Int32)">
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStoppingPatternAsync(BusTrackerWeb.Models.RunModel)">
             <summary>
-            Get the pattern for a route run from the PTV API.
-            </summary>
-            <returns>PTV API Stopping Pattern.</returns>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteStopsAsync(System.Int32)">
-            <summary>
-            Get the stops for a route from the PTV API.
+            Get the departures for a specific run from the PTV API.
             </summary>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
@@ -568,13 +581,214 @@
         </member>
         <member name="M:BusTrackerWeb.Controllers.RouteController.GetRoutes">
             <summary>
-            Get a collection of bus routes.
+            Get a list of all PTV bus routes.
             </summary>
-            <returns>An array of bus route objects.</returns>
+            <returns>An array of RouteModel objects.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.RouteController.GetRoute(System.Int32)">
+            <summary>
+            Get a specific PTV bus route.
+            </summary>
+            <param name="routeId">PTV Bus Route Id.</param>
+            <returns>A RouteModel object.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.RouteController.GetRouteDirections(System.Int32)">
+            <summary>
+            Get a list of PTV directions for a specific route.
+            </summary>
+            <param name="routeId">PTV Bus Route Id.</param>
+            <returns>An array of DirectionModel objects.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.RouteController.GetRouteNextRun(System.Int32,System.Int32)">
+            <summary>
+            Get the next PTV run scheduled for specific route and direction.
+            </summary>
+            <param name="routeId">PTV Bus Route Id.</param>
+            <param name="directionId">PTV Direction Id.</param>
+            <returns>A RunModel object.</returns>
         </member>
         <member name="T:BusTrackerWeb.Models.BusModel">
             <summary>
             Bus Tracker Bus Model.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.BusModel.BusRegoNumber">
+            <summary>
+            The bus road registration number.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.BusModel.BusLongitude">
+            <summary>
+            The current GPS longitude of the bus.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.BusModel.BusLatitude">
+            <summary>
+            The current GPS latitude of the bus.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.BusModel.BusPreviousStopId">
+            <summary>
+            The bus's previous stop.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.BusModel.RouteId">
+            <summary>
+            The PTV Route Id of the current run.
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.DepartureModel">
+            <summary>
+            Bus Tracker Departure Model.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DepartureModel.Stop">
+            <summary>
+            The bus stop associated with this departure.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DepartureModel.RouteId">
+            <summary>
+            The PTV Route Id associated with this departure.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DepartureModel.RunId">
+            <summary>
+            The PTV Run Id associated with this departure.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DepartureModel.DirectionId">
+            <summary>
+            The PTV Direction Id associated with this departure.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DepartureModel.Disruptions">
+            <summary>
+            A collection of PTV Disruption Id's associated with this departure.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DepartureModel.ScheduledDeparture">
+            <summary>
+            The scheduled departure time from the associated bus stop.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DepartureModel.EstimatedDeparture">
+            <summary>
+            The estimated departure time from the associated bus stop.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DepartureModel.Flags">
+            <summary>
+            A summary of PTV flags for this departure.
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.DirectionModel">
+            <summary>
+            Bus Tracker Direction Model.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DirectionModel.DirectionId">
+            <summary>
+            The PTV Direction Id.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DirectionModel.DirectionName">
+            <summary>
+            The bus's direction of travel i.e. generally the last stop of the route.
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiDirection">
+            <summary>
+            PTV API Direction Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiDeparturesResponse">
+            <summary>
+            PTV API Departures Response Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiDirectionsResponse">
+            <summary>
+            PTV API Directions Response Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.DisruptionModel">
+            <summary>
+            Bus Tracker Disruption Model, Refer:
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.DisruptionId">
+            <summary>
+            The PTV Disruption Id.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.Title">
+            <summary>
+            The PTV Title for this disruption.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.Url">
+            <summary>
+            The PTV link for more detail on this disruption.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.Description">
+            <summary>
+            PTV Details of the disruptions.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.DisruptionStatus">
+            <summary>
+            PTV status of the disruption.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.DisruptionType">
+            <summary>
+            The PTV disruption type category.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.PublishedOn">
+            <summary>
+            The disruption publication time.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.LastUpdated">
+            <summary>
+            The disruption last update time.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.FromDate">
+            <summary>
+            The time from which this disruption is in effect.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.DisruptionModel.ToDate">
+            <summary>
+            The time at which this disruption ends.
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiRouteResponse">
+            <summary>
+            PTV API Route Response Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.StoppingPatternModel">
+            <summary>
+            Bus Tracker Stopping Pattern Model.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.StoppingPatternModel.Departures">
+            <summary>
+            The departures associated with this stopping pattern.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.StoppingPatternModel.Disruptions">
+            <summary>
+            The disruptions associated with this stopping pattern.
             </summary>
         </member>
         <member name="T:BusTrackerWeb.Models.PtvApiDisruptionRoute">
@@ -593,6 +807,61 @@
             <summary>
             PTV API Disruption Model, Refer:
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.StopModel">
+            <summary>
+            Bus Tracker Bus Stop Model.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.StopModel.StopId">
+            <summary>
+            The PTV Stop Id.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.StopModel.StopName">
+            <summary>
+            The stop name.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.StopModel.StopLatitude">
+            <summary>
+            The stop GPS latitude.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.StopModel.StopLongitude">
+            <summary>
+            The stop GPS longitude.
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.RunModel">
+            <summary>
+            Bus Tracker Run Model
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.RunModel.RunId">
+            <summary>
+            The PTV Run Id.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.RunModel.Route">
+            <summary>
+            The route associated with this run.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.RunModel.FinalStop">
+            <summary>
+            The final bus stop associated with this run.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.RunModel.Direction">
+            <summary>
+            The direction associated with this run.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.RunModel.StoppingPattern">
+            <summary>
+            The stopping pattern associated with this run.
             </summary>
         </member>
         <member name="T:BusTrackerWeb.Models.PtvApiStopOnRouteResponse">
@@ -631,37 +900,37 @@
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>
-        <member name="T:BusTrackerWeb.Models.PtvApiRouteResponse">
+        <member name="T:BusTrackerWeb.Models.PtvApiRoutesResponse">
             <summary>
-            PTV API Route Response Model, Refer:
+            PTV API Routes Response Model, Refer:
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>
-        <member name="T:BusTrackerWeb.Models.PtvApiSignerModel">
+        <member name="T:BusTrackerWeb.Models.PtvApiSignitureModel">
             <summary>
             This class models a PTV API URL Request signer with a HMAC-SHA1 hash.  As per document:
             PTV 2016,PTV Timetable API – API Key and Signature information', 
             https://static.ptv.vic.gov.au/PTV/PTV%20docs/API/1475462320/PTV-Timetable-API-key-and-signature-document.RTF.
             </summary>
         </member>
-        <member name="P:BusTrackerWeb.Models.PtvApiSignerModel.ApiKey">
+        <member name="P:BusTrackerWeb.Models.PtvApiSignitureModel.ApiKey">
             <summary>
             The unique API Key provided by PTV.
             </summary>
         </member>
-        <member name="P:BusTrackerWeb.Models.PtvApiSignerModel.ApiDeveloperId">
+        <member name="P:BusTrackerWeb.Models.PtvApiSignitureModel.ApiDeveloperId">
             <summary>
             The Developer Id provided by PTV.
             </summary>
         </member>
-        <member name="M:BusTrackerWeb.Models.PtvApiSignerModel.#ctor(System.String,System.String)">
+        <member name="M:BusTrackerWeb.Models.PtvApiSignitureModel.#ctor(System.String,System.String)">
             <summary>
             Custom constuctor to initilise class properties.
             </summary>
             <param name="key">The unique API Key provided by PTV.</param>
             <param name="developerId">The Developer Id provided by PTV.</param>
         </member>
-        <member name="M:BusTrackerWeb.Models.PtvApiSignerModel.SignApiUrl(System.String,System.String)">
+        <member name="M:BusTrackerWeb.Models.PtvApiSignitureModel.SignApiUrl(System.String,System.String)">
             <summary>
             This function concatenates the request Url with the Developer ID before using a HMACSHA1
             hash function to generate a request signiture. The base Url, request Url and signture 
@@ -686,6 +955,26 @@
         <member name="T:BusTrackerWeb.Models.RouteModel">
             <summary>
             Bus Tracker Route Model.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.RouteModel.RouteId">
+            <summary>
+            The PTV route Id.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.RouteModel.RouteName">
+            <summary>
+            The name of this route.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.RouteModel.RouteNumber">
+            <summary>
+            The public reference number of this route.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.RouteModel.RouteType">
+            <summary>
+            The PTV route type i.e. all bus services = 2.
             </summary>
         </member>
     </members>
