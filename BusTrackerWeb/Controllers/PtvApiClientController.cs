@@ -19,7 +19,7 @@ namespace BusTrackerWeb.Controllers
 
         HttpClient Client { get; set; }
 
-        PtvApiSignerModel ApiSigner { get; set; }
+        PtvApiSignitureModel ApiSigner { get; set; }
 
         /// <summary>
         /// Initialise the clent controller.
@@ -30,7 +30,7 @@ namespace BusTrackerWeb.Controllers
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            ApiSigner = new Models.PtvApiSignerModel(Properties.Settings.Default.PtvApiDeveloperKey,
+            ApiSigner = new Models.PtvApiSignitureModel(Properties.Settings.Default.PtvApiDeveloperKey,
                 Properties.Settings.Default.PtvApiDeveloperId);
         }
 

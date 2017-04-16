@@ -19,7 +19,7 @@ namespace BusTrackerWeb.Models.Models.Tests
             string baseUrl = "http://timetableapi.ptv.vic.gov.au";
             string requestUrl = "/v3/routes";
 
-            PtvApiSignerModel apiSigniture = new PtvApiSignerModel(key, developerId);
+            PtvApiSignitureModel apiSigniture = new PtvApiSignitureModel(key, developerId);
 
             string signedUrl = apiSigniture.SignApiUrl(baseUrl, requestUrl);
 

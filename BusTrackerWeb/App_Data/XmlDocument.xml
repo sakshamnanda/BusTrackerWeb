@@ -627,12 +627,6 @@
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>
-        <member name="T:BusTrackerWeb.Models.PtvApiDirectionResponse">
-            <summary>
-            PTV API Direction Response Model, Refer:
-            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
-            </summary>
-        </member>
         <member name="T:BusTrackerWeb.Models.PtvApiDirectionsResponse">
             <summary>
             PTV API Directions Response Model, Refer:
@@ -725,31 +719,31 @@
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>
-        <member name="T:BusTrackerWeb.Models.PtvApiSignerModel">
+        <member name="T:BusTrackerWeb.Models.PtvApiSignitureModel">
             <summary>
             This class models a PTV API URL Request signer with a HMAC-SHA1 hash.  As per document:
             PTV 2016,PTV Timetable API – API Key and Signature information', 
             https://static.ptv.vic.gov.au/PTV/PTV%20docs/API/1475462320/PTV-Timetable-API-key-and-signature-document.RTF.
             </summary>
         </member>
-        <member name="P:BusTrackerWeb.Models.PtvApiSignerModel.ApiKey">
+        <member name="P:BusTrackerWeb.Models.PtvApiSignitureModel.ApiKey">
             <summary>
             The unique API Key provided by PTV.
             </summary>
         </member>
-        <member name="P:BusTrackerWeb.Models.PtvApiSignerModel.ApiDeveloperId">
+        <member name="P:BusTrackerWeb.Models.PtvApiSignitureModel.ApiDeveloperId">
             <summary>
             The Developer Id provided by PTV.
             </summary>
         </member>
-        <member name="M:BusTrackerWeb.Models.PtvApiSignerModel.#ctor(System.String,System.String)">
+        <member name="M:BusTrackerWeb.Models.PtvApiSignitureModel.#ctor(System.String,System.String)">
             <summary>
             Custom constuctor to initilise class properties.
             </summary>
             <param name="key">The unique API Key provided by PTV.</param>
             <param name="developerId">The Developer Id provided by PTV.</param>
         </member>
-        <member name="M:BusTrackerWeb.Models.PtvApiSignerModel.SignApiUrl(System.String,System.String)">
+        <member name="M:BusTrackerWeb.Models.PtvApiSignitureModel.SignApiUrl(System.String,System.String)">
             <summary>
             This function concatenates the request Url with the Developer ID before using a HMACSHA1
             hash function to generate a request signiture. The base Url, request Url and signture 
