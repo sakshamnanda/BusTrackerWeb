@@ -290,8 +290,6 @@ namespace BusTrackerWeb.Controllers
                             DirectionId = apiDeparture.direction_id,
                             Disruptions = apiDeparture.disruption_ids,
                             ScheduledDeparture = DateTime.Parse(apiDeparture.scheduled_departure_utc, null, DateTimeStyles.AssumeLocal),
-                            AtPlatform = apiDeparture.at_platform,
-                            PlatformNumber = apiDeparture.platform_number,
                             Flags = apiDeparture.flags
                         });
                     }
