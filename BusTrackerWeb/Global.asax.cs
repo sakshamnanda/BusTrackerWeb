@@ -7,12 +7,15 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using BusTrackerWeb.Controllers;
+using BusTrackerWeb.Models;
 
 namespace BusTrackerWeb
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
         public static PtvApiClientController PtvApiControl;
+
+        public static List<BusModel> TrackedBuses;
 
         protected void Application_Start()
         {
@@ -23,7 +26,10 @@ namespace BusTrackerWeb
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Setup a single app PTV API Client i.e. to prevent http port exhaustion.
-            PtvApiControl = new Controllers.PtvApiClientController(); 
+            PtvApiControl = new Controllers.PtvApiClientController();
+
+            // Setup a stati
+            TrackedBuses = new List<BusModel>();
         }
     }
 }

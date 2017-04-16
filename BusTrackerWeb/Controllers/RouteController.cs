@@ -1,6 +1,7 @@
 ﻿using BusTrackerWeb.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,7 +33,18 @@ namespace BusTrackerWeb.Controllers
         [ActionName("GetRoute")]
         public async Task<RouteModel> GetRoute(int routeId)
         {
-            return await WebApiApplication.PtvApiControl.GetRouteAsync(routeId);
+            RouteModel route = new RouteModel();
+
+            try
+            {
+                route = await WebApiApplication.PtvApiControl.GetRouteAsync(routeId);
+            }
+            catch(Exception e)
+            {
+                Trace.TraceError("GetRoute Exception: {0}", e.Message);
+            }
+
+            return route;
         }
 
         /// <summary>
@@ -43,14 +55,23 @@ namespace BusTrackerWeb.Controllers
         [ActionName("GetRouteDirections")]
         public async Task<List<DirectionModel>> GetRouteDirections(int routeId)
         {
-            // Create a new route.
-            RouteModel route = await WebApiApplication.PtvApiControl.GetRouteAsync(routeId);
+            List<DirectionModel> routeDirections = new List<Models.DirectionModel>();
 
-            // Get all stops for a given route.
-            List<DirectionModel> directions = await WebApiApplication.PtvApiControl.
-                GetRouteDirectionsAsync(route);
+            try
+            {
+                // Create a new route.
+                RouteModel route = await WebApiApplication.PtvApiControl.GetRouteAsync(routeId);
 
-            return directions;
+                // Get all stops for a given route.
+                routeDirections = await WebApiApplication.PtvApiControl.
+                    GetRouteDirectionsAsync(route);
+            }
+            catch(Exception e)
+            {
+                Trace.TraceError("GetRouteDirections Exception: {0}", e.Message);
+            }
+
+            return routeDirections;
         }
 
         /// <summary>
@@ -62,56 +83,63 @@ namespace BusTrackerWeb.Controllers
         [ActionName("GetRouteNextRun")]
         public async Task<RunModel> GetRouteNextRun(int routeId, int directionId)
         {
-            RunModel nextRun = new Models.RunModel();
+            RunModel nextRun = new RunModel();
 
-            // Get the route.
-            RouteModel route = await WebApiApplication.PtvApiControl.GetRouteAsync(routeId);
-
-            // Get route direction.
-            DirectionModel direction = await WebApiApplication.PtvApiControl.
-                GetDirectionAsync(directionId, route);
-
-            // Get all runs for a route.
-            List<RunModel> routeRuns = await WebApiApplication.PtvApiControl.
-                GetRouteRunsAsync(route);
-
-            // Index through all runs to find those that have not expired.
-            List<RunModel> currentRuns = new List<RunModel>();
-            bool previousRunInPast = false;
-            foreach (RunModel run in routeRuns)
+            try
             {
-                // Skip this run if the previous run was in the past.
-                // NB:  This condition optimises the algorithm i.e. avoids querying the PTV API for 
-                //      runs that have already expired.
-                if (!previousRunInPast)
+                // Get the route.
+                RouteModel route = await WebApiApplication.PtvApiControl.GetRouteAsync(routeId);
+
+                // Get route direction.
+                DirectionModel direction = await WebApiApplication.PtvApiControl.
+                    GetDirectionAsync(directionId, route);
+
+                // Get all runs for a route.
+                List<RunModel> routeRuns = await WebApiApplication.PtvApiControl.
+                    GetRouteRunsAsync(route);
+
+                // Index through all runs to find those that have not expired.
+                List<RunModel> currentRuns = new List<RunModel>();
+                bool previousRunInPast = false;
+                foreach (RunModel run in routeRuns)
                 {
-                    run.StoppingPattern = await WebApiApplication.PtvApiControl.
-                        GetStoppingPatternAsync(run);
-
-                    // Check the current run for optimisation sentinals.
-                    DateTime runLastStoptime = run.StoppingPattern.Departures.Last().
-                        ScheduledDeparture;
-                    int runDirectionId = run.StoppingPattern.Departures.Last().DirectionId;
-
-                    if ((runDirectionId == directionId) && (runLastStoptime > DateTime.Now))
+                    // Skip this run if the previous run was in the past.
+                    // NB:  This condition optimises the algorithm i.e. avoids querying the PTV API for 
+                    //      runs that have already expired.
+                    if (!previousRunInPast)
                     {
-                        // This is a future run, update direction attribute and add to current list.
-                        run.Direction = direction;
-                        currentRuns.Add(run);
-                    }
-                    else
-                    {
-                        // This is the first run in the past, ignore this and all remaining runs.
-                        previousRunInPast = true;
+                        run.StoppingPattern = await WebApiApplication.PtvApiControl.
+                            GetStoppingPatternAsync(run);
+
+                        // Check the current run for optimisation sentinals.
+                        DateTime runLastStoptime = run.StoppingPattern.Departures.Last().
+                            ScheduledDeparture;
+                        int runDirectionId = run.StoppingPattern.Departures.Last().DirectionId;
+
+                        if ((runDirectionId == directionId) && (runLastStoptime > DateTime.Now))
+                        {
+                            // This is a future run, update direction attribute and add to current list.
+                            run.Direction = direction;
+                            currentRuns.Add(run);
+                        }
+                        else
+                        {
+                            // This is the first run in the past, ignore this and all remaining runs.
+                            previousRunInPast = true;
+                        }
                     }
                 }
-            }
 
-            // Order the current run collection by Last Stop Scheduled Departure Time, the first 
-            // run in the ordered collection will be the current run.
-            currentRuns = currentRuns.
-                OrderBy(r => r.StoppingPattern.Departures.Last().ScheduledDeparture).ToList();             
-            nextRun = currentRuns.First();
+                // Order the current run collection by Last Stop Scheduled Departure Time, the first 
+                // run in the ordered collection will be the current run.
+                currentRuns = currentRuns.
+                    OrderBy(r => r.StoppingPattern.Departures.Last().ScheduledDeparture).ToList();
+                nextRun = currentRuns.First();
+            }
+            catch(Exception e)
+            {
+                Trace.TraceError("GetRouteNextRun Exception: {0}", e.Message);
+            }
 
             return nextRun;
         }
