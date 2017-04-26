@@ -515,6 +515,28 @@
             <param name="routeId">The PTV Route Id of the buses to be returned.</param>
             <returns>A collection of Bus Model objects.</returns>
         </member>
+        <member name="T:BusTrackerWeb.Controllers.DriverController">
+            <summary>
+            Controls all Bus Tracker Driver View actions.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.DriverController.Index">
+            <summary>
+            Open the Passenger Landing View.
+            </summary>
+            <returns>Passenger View.</returns>
+        </member>
+        <member name="T:BusTrackerWeb.Controllers.PassengerController">
+            <summary>
+            Controls all Bus Tracker Passenger View actions.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.PassengerController.Index">
+            <summary>
+            Open the Passenger Landing View.
+            </summary>
+            <returns>Passenger View.</returns>
+        </member>
         <member name="T:BusTrackerWeb.Controllers.HomeController">
             <summary>
             Controls all Bus Tracker Home View actions.
