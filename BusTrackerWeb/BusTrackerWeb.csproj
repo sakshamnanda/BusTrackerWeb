@@ -228,6 +228,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="BusTrackerWeb.PublishSettings" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
