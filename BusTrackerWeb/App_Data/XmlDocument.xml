@@ -564,28 +564,54 @@
             </summary>
             <returns>Bus Route collection.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRoutesByNameAsync(System.String)">
+            <summary>
+            Get all bus routes from the PTV API filtered by a full or patial route name.
+            </summary>
+            <param name="routeName">The full or partial route name filter.</param>
+            <returns>Bus Route collection.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteAsync(System.Int32)">
+            <summary>
+            Get a specific PTV bus route.
+            </summary>
+            <param name="routeId">PTV Bus Route Id.</param>
+            <returns>A RouteModel object.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetDirectionAsync(System.Int32,BusTrackerWeb.Models.RouteModel)">
+            <summary>
+            Get a list of PTV directions for a specific route.
+            </summary>
+            <param name="directionId">PTV Direction Id.</param>
+            <param name="route">A RouteModel object.</param>
+            <returns>A DirectionModel object.</returns>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteDirectionsAsync(BusTrackerWeb.Models.RouteModel)">
             <summary>
             Get all bus routes from the PTV API.
             </summary>
-            <returns>Bus Route collection.</returns>
+            <param name="route">The route for which to find all directions.</param>
+            <returns>Route Direction collection.</returns>
         </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteStopsAsync(BusTrackerWeb.Models.RouteModel)">
             <summary>
             Get the stops for a route from the PTV API.
             </summary>
+            <param name="route">The route for which to find all stops.</param>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteRunsAsync(BusTrackerWeb.Models.RouteModel)">
             <summary>
             Get all route runs from the PTV API.
             </summary>
+            <param name="route">The route for which to find all runs.</param>
             <returns>PTV API Runs Response.</returns>
         </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStoppingPatternAsync(BusTrackerWeb.Models.RunModel)">
             <summary>
             Get the departures for a specific run from the PTV API.
             </summary>
+            <param name="run">The run for which to find all stops.</param>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetPtvApiResponse``1(System.String)">
@@ -604,6 +630,12 @@
         <member name="M:BusTrackerWeb.Controllers.RouteController.GetRoutes">
             <summary>
             Get a list of all PTV bus routes.
+            </summary>
+            <returns>An array of RouteModel objects.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.RouteController.GetRoutesByName(System.String)">
+            <summary>
+            Get a list of all PTV bus routes filtered by route name.
             </summary>
             <returns>An array of RouteModel objects.</returns>
         </member>

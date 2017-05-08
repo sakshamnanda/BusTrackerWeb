@@ -26,6 +26,17 @@ namespace BusTrackerWeb.Controllers
         }
 
         /// <summary>
+        /// Get a list of all PTV bus routes filtered by route name.
+        /// </summary>
+        /// <returns>An array of RouteModel objects.</returns>
+        [ActionName("GetRoutesByName")]
+        public async Task<List<RouteModel>> GetRoutesByName(string routeName)
+        {
+            return await WebApiApplication.PtvApiControl.GetRoutesByNameAsync(routeName);
+        }
+
+
+        /// <summary>
         /// Get a specific PTV bus route.
         /// </summary>
         /// <param name="routeId">PTV Bus Route Id.</param>
