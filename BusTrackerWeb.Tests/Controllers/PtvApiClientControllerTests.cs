@@ -29,6 +29,17 @@ namespace BusTrackerWeb.Controllers.Tests
         }
 
         [TestMethod()]
+        public async Task GetRoutesByNameAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+
+            List<RouteModel> routes = await apiControl.GetRoutesByNameAsync("Deakin");
+
+            Assert.IsTrue(routes.Count == 9);
+        }
+
+
+        [TestMethod()]
         public async Task GetRouteRunsAsyncTest()
         {
             PtvApiClientController apiControl = new PtvApiClientController();
