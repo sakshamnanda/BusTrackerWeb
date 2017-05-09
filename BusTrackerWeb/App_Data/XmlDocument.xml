@@ -830,6 +830,18 @@
             http://timetableapi.ptv.vic.gov.au/swagger/ui/index
             </summary>
         </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiStopGeosearch">
+            <summary>
+            PTV API Stop Geo Search Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
+        <member name="T:BusTrackerWeb.Models.PtvApiStopsByDistanceResponse">
+            <summary>
+            PTV API Stops by Distance Response Model, Refer:
+            http://timetableapi.ptv.vic.gov.au/swagger/ui/index
+            </summary>
+        </member>
         <member name="T:BusTrackerWeb.Models.StoppingPatternModel">
             <summary>
             Bus Tracker Stopping Pattern Model.
