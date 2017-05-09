@@ -600,6 +600,15 @@
             <param name="route">The route for which to find all stops.</param>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStopsByDistanceAsync(System.Decimal,System.Decimal,System.Int32)">
+            <summary>
+            Get the stop in proximity to a GPS location from the PTV API.
+            </summary>
+            <param name="latitude">The location latitude.</param>
+            <param name="longitude">The location longitude.</param>
+            <param name="maxDistance">The proximity radius in meters.</param>
+            <returns>Stop Model collection.</returns>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetRouteRunsAsync(BusTrackerWeb.Models.RouteModel)">
             <summary>
             Get all route runs from the PTV API.
@@ -681,7 +690,7 @@
             The current GPS latitude of the bus.
             </summary>
         </member>
-        <member name="P:BusTrackerWeb.Models.BusModel.BusPreviousStopId">
+        <member name="P:BusTrackerWeb.Models.BusModel.BusPreviousStop">
             <summary>
             The bus's previous stop.
             </summary>

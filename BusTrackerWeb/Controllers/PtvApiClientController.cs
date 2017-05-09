@@ -268,6 +268,13 @@ namespace BusTrackerWeb.Controllers
             return stops;
         }
 
+        /// <summary>
+        /// Get the stop in proximity to a GPS location from the PTV API.
+        /// </summary>
+        /// <param name="latitude">The location latitude.</param>
+        /// <param name="longitude">The location longitude.</param>
+        /// <param name="maxDistance">The proximity radius in meters.</param>
+        /// <returns>Stop Model collection.</returns>
         public async Task<List<StopModel>> GetStopsByDistanceAsync(decimal latitude, decimal longitude, int maxDistance)
         {
             // Get all bus type routes.
@@ -303,8 +310,7 @@ namespace BusTrackerWeb.Controllers
 
             return stops;
         }
-
-
+        
         /// <summary>
         /// Get all route runs from the PTV API.
         /// </summary>
@@ -416,8 +422,6 @@ namespace BusTrackerWeb.Controllers
             return stoppingPattern;
         }
         
-
-
         /// <summary>
         /// Generic PTV API Get Request function.
         /// </summary>
