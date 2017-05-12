@@ -106,5 +106,20 @@ namespace BusTrackerWeb.Controllers.Tests
 
             Assert.IsTrue(pattern.Departures.Count != 0);
         }
+
+        [TestMethod()]
+        public async Task GetStopsByDistanceAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+
+            decimal latitude = -38.145M;
+            decimal longitude = 144.354M;
+            int maxDistance = 150;
+
+            List<StopModel> stops = 
+                await apiControl.GetStopsByDistanceAsync(latitude, longitude, maxDistance);
+
+            Assert.IsTrue(stops.Count == 2);
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 
@@ -21,13 +22,33 @@ namespace BusTrackerWeb.Controllers
         /// <param name="bus">The bus object to be updated.</param>
         /// <returns>200 if updated.</returns>
         [ActionName("PutBusOnRouteLocation")]
-        public int PutBusOnRouteLocation([FromBody]BusModel bus)
+        public async Task<int> PutBusOnRouteLocation([FromBody]BusModel bus)
         {
             // Set default HTTP return code.
             int httpResult = 400;
 
             try
             {
+                // Check for any stops in close proximity to the bus location.
+                List<StopModel> proximiytStops = await WebApiApplication.PtvApiControl.
+                    GetStopsByDistanceAsync(bus.BusLatitude, bus.BusLongitude,
+                    Properties.Settings.Default.BusStopMaxDistance);
+
+                // Get the stops on route.
+                List<StopModel> routeStops = await WebApiApplication.PtvApiControl.
+                    GetRouteStopsAsync(new RouteModel { RouteId = bus.RouteId });
+
+                // If the bus is in proximity to a stop on route, update the bus last stop.
+                if (proximiytStops.Count != 0)
+                {
+                    StopModel closestStop = proximiytStops.First();
+
+                    if (routeStops.Exists(s => s.StopId == closestStop.StopId))
+                    {
+                        bus.BusPreviousStop = closestStop;
+                    }
+                }
+
                 // Check for the bus in the current collection
                 if (WebApiApplication.TrackedBuses.Exists(b => b.BusRegoNumber == bus.BusRegoNumber))
                 {
@@ -37,6 +58,7 @@ namespace BusTrackerWeb.Controllers
                     trackedBus.BusLatitude = bus.BusLatitude;
                     trackedBus.BusLongitude = bus.BusLongitude;
                     trackedBus.RouteId = bus.RouteId;
+                    trackedBus.BusPreviousStop = bus.BusPreviousStop;
                 }
                 else
                 {
@@ -46,12 +68,13 @@ namespace BusTrackerWeb.Controllers
                         BusRegoNumber = bus.BusRegoNumber,
                         BusLatitude = bus.BusLatitude,
                         BusLongitude = bus.BusLongitude,
-                        RouteId = bus.RouteId
+                        RouteId = bus.RouteId,
+                        BusPreviousStop = bus.BusPreviousStop
                     };
 
                     WebApiApplication.TrackedBuses.Add(newBus);
                 }
-
+                
                 httpResult = 200;
             }
             catch(Exception e)

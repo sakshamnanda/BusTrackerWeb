@@ -11,5 +11,8 @@
     <Setting Name="PtvApiBaseUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://timetableapi.ptv.vic.gov.au</Value>
     </Setting>
+    <Setting Name="BusStopMaxDistance" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">25</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

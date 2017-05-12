@@ -269,6 +269,49 @@ namespace BusTrackerWeb.Controllers
         }
 
         /// <summary>
+        /// Get the stop in proximity to a GPS location from the PTV API.
+        /// </summary>
+        /// <param name="latitude">The location latitude.</param>
+        /// <param name="longitude">The location longitude.</param>
+        /// <param name="maxDistance">The proximity radius in meters.</param>
+        /// <returns>Stop Model collection.</returns>
+        public async Task<List<StopModel>> GetStopsByDistanceAsync(decimal latitude, decimal longitude, int maxDistance)
+        {
+            // Get all bus type routes.
+            string getStopsRequest = 
+                string.Format("/v3/stops/location/{0},{1}?route_types=2&max_distance={2}", latitude,
+                longitude, maxDistance);
+
+            PtvApiStopsByDistanceResponse stopsResponse =
+                await GetPtvApiResponse<PtvApiStopsByDistanceResponse>(getStopsRequest);
+
+            // If the response is healthy try to convert the API response to a route collection.
+            List<StopModel> stops = new List<StopModel>();
+            if (stopsResponse.Status.Health == 1)
+            {
+                foreach (PtvApiStopGeosearch apiStop in stopsResponse.Stops)
+                {
+                    try
+                    {
+                        stops.Add(new StopModel
+                        {
+                            StopId = apiStop.stop_id,
+                            StopName = apiStop.stop_name,
+                            StopLatitude = apiStop.stop_latitude,
+                            StopLongitude = apiStop.stop_longitude
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError("GetStopsByDistanceAsync Exception: {0}", e.Message);
+                    }
+                }
+            }
+
+            return stops;
+        }
+        
+        /// <summary>
         /// Get all route runs from the PTV API.
         /// </summary>
         /// <param name="route">The route for which to find all runs.</param>
