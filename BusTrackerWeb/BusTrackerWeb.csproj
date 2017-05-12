@@ -175,6 +175,8 @@
     <Compile Include="Models\PtvApi\PtvApiDirectionsResponse.cs" />
     <Compile Include="Models\DisruptionModel.cs" />
     <Compile Include="Models\PtvApi\PtvApiRouteResponse.cs" />
+    <Compile Include="Models\PtvApi\PtvApiStopGeosearch.cs" />
+    <Compile Include="Models\PtvApi\PtvApiStopsByDistanceResponse.cs" />
     <Compile Include="Models\StoppingPatternModel.cs" />
     <Compile Include="Models\PtvApi\PtvApiDisruptionRoute.cs" />
     <Compile Include="Models\PtvApi\PtvApiDisruptionDirection.cs" />
@@ -202,6 +204,7 @@
   <ItemGroup>
     <Content Include="App_Data\XmlDocument.xml" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="BusTrackerWeb.PublishSettings" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -228,7 +231,6 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="BusTrackerWeb.PublishSettings" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
