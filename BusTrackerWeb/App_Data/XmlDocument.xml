@@ -548,6 +548,24 @@
             </summary>
             <returns>Index View.</returns>
         </member>
+        <member name="T:BusTrackerWeb.Controllers.MapsApiClientController">
+            <summary>
+            Controls all Google Maps API requests.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.MapsApiClientController.#ctor">
+            <summary>
+            Initialise the clent controller.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.MapsApiClientController.GetPtvApiResponse``1(System.String)">
+            <summary>
+            Generic PTV API Get Request function.
+            </summary>
+            <typeparam name="T">PTV API object type to be retrieved.</typeparam>
+            <param name="request">API request string.</param>
+            <returns>The API response.</returns>
+        </member>
         <member name="T:BusTrackerWeb.Controllers.PtvApiClientController">
             <summary>
             Controls all Bus Tracker PTV API requests.
