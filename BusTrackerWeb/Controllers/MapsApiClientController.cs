@@ -12,6 +12,8 @@ using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using System.Web;
+using System.Device.Location;
+using System.Text;
 
 namespace BusTrackerWeb.Controllers
 {
@@ -20,38 +22,37 @@ namespace BusTrackerWeb.Controllers
     /// </summary>
     public class MapsApiClientController
     {
-        const string PTV_API_BASE_URL = "https://maps.googleapis.com/maps/api/directions/json?origin=-38.145,144.355&destination=-38.198,144.300&waypoints=-38.157,144.356|-38.189,144.343&departure_time=now&traffic_model=best_guess&key=AIzaSyAyEgv4_85K8azHU2fYz78xxGAT3ne3egU";
+        const string PTV_API_BASE_URL = "https://maps.googleapis.com/maps/api/directions/json?";
 
         HttpClient Client { get; set; }
 
-        PtvApiSignitureModel ApiSigner { get; set; }
-
         /// <summary>
-        /// Initialise the clent controller.
+        /// Initialise the client controller.
         /// </summary>
         public MapsApiClientController()
         {
             Client = new HttpClient();
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            //ApiSigner = new Models.PtvApiSignitureModel(Properties.Settings.Default.PtvApiDeveloperKey,
-            //    Properties.Settings.Default.PtvApiDeveloperId);
         }
 
 
-        public DirectionsResponse MakeRequest()
+        public DirectionsResponse GetDirections(GeoCoordinate[] routePoints)
         {
             try
             {
-                HttpWebRequest request = WebRequest.Create(PTV_API_BASE_URL) as HttpWebRequest;
+                string requestQuery = BuildDirectionsQuery(routePoints);
+
+                HttpWebRequest request = WebRequest.Create(requestQuery) as HttpWebRequest;
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
-                        throw new Exception(String.Format(
-                        "Server error (HTTP {0}: {1}).",
+                    {
+                        throw new Exception(String.Format("Server error (HTTP {0}: {1}).",
                         response.StatusCode,
                         response.StatusDescription));
+                    }
+
                     DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(DirectionsResponse));
                     object objResponse = jsonSerializer.ReadObject(response.GetResponseStream());
                     DirectionsResponse jsonResponse = objResponse as DirectionsResponse;
@@ -65,38 +66,52 @@ namespace BusTrackerWeb.Controllers
             }
         }
 
-        /// <summary>
-        /// Generic PTV API Get Request function.
-        /// </summary>
-        /// <typeparam name="T">PTV API object type to be retrieved.</typeparam>
-        /// <param name="request">API request string.</param>
-        /// <returns>The API response.</returns>
-        private async Task<T> GetPtvApiResponse<T>(string request)
+        public string BuildDirectionsQuery(GeoCoordinate[] routePoints)
         {
-            T response = default(T);
+            string origin = string.Empty;
+            string destination = string.Empty;
 
-            try
+            StringBuilder waypointBuilder = new StringBuilder();
+            StringBuilder queryBuilder = new StringBuilder();
+
+            // Determine API query parameters from route points.
+            waypointBuilder.Append("&waypoints=");
+            int pointCount = routePoints.Count();
+            for (int i = 0; i < pointCount; i++)
             {
-                // Sign the API request with developer ID and key.
-                //string clientRequest = ApiSigner.SignApiUrl(PTV_API_BASE_URL, request);
+                string latitude = routePoints[i].Latitude.ToString();
+                string longitude = routePoints[i].Longitude.ToString();
 
-                // Send a request to the PTV API.
-                //HttpResponseMessage httpResponse = await Client.GetAsync(clientRequest);
-                HttpResponseMessage httpResponse = await Client.GetAsync(PTV_API_BASE_URL);
-
-
-                if (httpResponse.IsSuccessStatusCode)
+                // Set the origin.
+                if (i == 0)
                 {
-                    // Deserialise the JSON API response into strongly typed objects.
-                    response = await httpResponse.Content.ReadAsAsync<T>();
+                    origin = string.Format("origin={0},{1}", latitude, longitude);
+                }
+                // Set the destination.
+                else if (i == pointCount - 1)
+                {
+                    destination = string.Format("&destination={0},{1}", latitude, longitude);
+                }
+                // Add last waypoint.
+                else if (i == pointCount - 2)
+                {
+                    waypointBuilder.AppendFormat("{0},{1}", latitude, longitude);
+                }
+                // Add midwaypoint.
+                else
+                {
+                    waypointBuilder.AppendFormat("{0},{1}|", latitude, longitude);
                 }
             }
-            catch (Exception e)
-            {
-                Trace.TraceError("GetPtvApiResponse Exception: {0}", e.Message);
-            }
 
-            return response;
+            // Set the API key.
+            string apiKey = Properties.Settings.Default.MapsApiDeveloperKey;
+
+            // Build the API query.
+            queryBuilder.AppendFormat("{0}{1}{2}{3}&departure_time=now&traffic_model=best_guess&key={4}",
+                PTV_API_BASE_URL, origin, destination, waypointBuilder, apiKey);
+
+            return queryBuilder.ToString();
         }
     }
 }

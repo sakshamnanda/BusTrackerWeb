@@ -58,5 +58,14 @@ namespace BusTrackerWeb.Properties {
                 return ((int)(this["BusStopMaxDistance"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("AIzaSyAyEgv4_85K8azHU2fYz78xxGAT3ne3egU")]
+        public string MapsApiDeveloperKey {
+            get {
+                return ((string)(this["MapsApiDeveloperKey"]));
+            }
+        }
     }
 }
