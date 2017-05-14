@@ -147,10 +147,10 @@ namespace BusTrackerWeb.Controllers
                 // run in the ordered collection will be the current run.
                 currentRuns = currentRuns.
                     OrderBy(r => r.StoppingPattern.Departures.Last().ScheduledDeparture).ToList();
+
                 nextRun = currentRuns.First();
 
-                // Update the run with the Google Directions API ETA.
-                // Build a collection of route geo locations.
+                // Build a collection of run geo locations.
                 List<GeoCoordinate> routePoints = new List<GeoCoordinate>();
                 foreach(DepartureModel departure in nextRun.StoppingPattern.Departures)
                 {
@@ -161,13 +161,27 @@ namespace BusTrackerWeb.Controllers
                     routePoints.Add(geoLocation);  
                 }
 
-                // Query Google Directions API.
-                List<Leg> routeLegs = WebApiApplication.MapsApiControl.GetDirections(routePoints.ToArray()); 
+                // Query Google Directions API for ETA.
 
-                // Update each stop on the run with Directions ETA.
-                foreach(var leg in routeLegs)
+                // TODO: Only query the stops from the last stop visited by the bus.
+
+                List<Leg> routeLegs = WebApiApplication.MapsApiControl.GetDirections(routePoints.ToArray());
+
+                // Update each stop on the run with ETA.
+
+                // TODO: Offset the for loop based on the first stop queried by the API.
+
+                int departureCount = nextRun.StoppingPattern.Departures.Count();
+                for (int i = 0; i < departureCount; i++)
                 {
+                    // Assume estimated departure time is scheduled time.
+                    if (i == 0)
+                    {
+                        nextRun.StoppingPattern.Departures[i].EstimatedDeparture = nextRun.StoppingPattern.Departures[i].ScheduledDeparture;
+                    }
 
+                    // ETA of current stop is last stop ETA plus travel time.
+                    nextRun.StoppingPattern.Departures[i].EstimatedDeparture = nextRun.StoppingPattern.Departures[i - 1].EstimatedDeparture.AddMinutes(routeLegs[i].duration.value);
                 }
             }
             catch(Exception e)
