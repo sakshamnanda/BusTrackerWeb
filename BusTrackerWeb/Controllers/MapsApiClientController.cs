@@ -41,6 +41,8 @@ namespace BusTrackerWeb.Controllers
         {
             try
             {
+                // Max of 23 waypoints allowed in each request!!!!!!
+                // Need to loop until spit and loop until all points queried.
                 string requestQuery = BuildDirectionsQuery(routePoints);
 
                 HttpWebRequest request = WebRequest.Create(requestQuery) as HttpWebRequest;

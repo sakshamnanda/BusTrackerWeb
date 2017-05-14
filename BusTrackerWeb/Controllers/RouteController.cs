@@ -1,6 +1,8 @@
 ﻿using BusTrackerWeb.Models;
+using BusTrackerWeb.Models.MapsApi;
 using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -146,6 +148,27 @@ namespace BusTrackerWeb.Controllers
                 currentRuns = currentRuns.
                     OrderBy(r => r.StoppingPattern.Departures.Last().ScheduledDeparture).ToList();
                 nextRun = currentRuns.First();
+
+                // Update the run with the Google Directions API ETA.
+                // Build a collection of route geo locations.
+                List<GeoCoordinate> routePoints = new List<GeoCoordinate>();
+                foreach(DepartureModel departure in nextRun.StoppingPattern.Departures)
+                {
+                    GeoCoordinate geoLocation = 
+                        new GeoCoordinate (Convert.ToDouble(departure.Stop.StopLatitude), 
+                        Convert.ToDouble(departure.Stop.StopLongitude));
+
+                    routePoints.Add(geoLocation);  
+                }
+
+                // Query Google Directions API.
+                DirectionsResponse directionsResponse = WebApiApplication.MapsApiControl.GetDirections(routePoints.ToArray()); 
+
+                // Update each stop on the run with Directions ETA.
+                foreach(var leg in directionsResponse.routes.First().legs)
+                {
+
+                }
             }
             catch(Exception e)
             {
