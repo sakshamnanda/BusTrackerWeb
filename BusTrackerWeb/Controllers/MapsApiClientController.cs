@@ -22,7 +22,8 @@ namespace BusTrackerWeb.Controllers
     /// </summary>
     public class MapsApiClientController
     {
-        const string PTV_API_BASE_URL = "https://maps.googleapis.com/maps/api/directions/json?";
+        const string MAPS_API_BASE_URL = "https://maps.googleapis.com/maps/api/directions/json?";
+        const int MAPS_MAX_WAYPOINTS = 23;
 
         HttpClient Client { get; set; }
 
@@ -37,35 +38,46 @@ namespace BusTrackerWeb.Controllers
         }
 
 
-        public DirectionsResponse GetDirections(GeoCoordinate[] routePoints)
+        public List<Leg> GetDirections(GeoCoordinate[] routePoints)
         {
+            List<Leg> routeLegs = new List<Leg>();
+
             try
             {
-                // Max of 23 waypoints allowed in each request!!!!!!
-                // Need to loop until spit and loop until all points queried.
-                string requestQuery = BuildDirectionsQuery(routePoints);
-
-                HttpWebRequest request = WebRequest.Create(requestQuery) as HttpWebRequest;
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                // Determine how many requests are required i.e. each request has a maximum number
+                // of waypoints allowed.
+                int requestsMax = (routePoints.Count() / MAPS_MAX_WAYPOINTS) + 1; 
+                
+                for(int i = 0; i < requestsMax; i++)
                 {
-                    if (response.StatusCode != HttpStatusCode.OK)
+                    GeoCoordinate[] requestPoints = routePoints.Skip((i * MAPS_MAX_WAYPOINTS)-1).Take(MAPS_MAX_WAYPOINTS).ToArray();
+
+                    string requestQuery = BuildDirectionsQuery(requestPoints);
+
+                    HttpWebRequest request = WebRequest.Create(requestQuery) as HttpWebRequest;
+
+                    using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                     {
-                        throw new Exception(String.Format("Server error (HTTP {0}: {1}).",
-                        response.StatusCode,
-                        response.StatusDescription));
+                        if (response.StatusCode != HttpStatusCode.OK)
+                        {
+                            throw new Exception(String.Format("Server error (HTTP {0}: {1}).",
+                            response.StatusCode,
+                            response.StatusDescription)); 
+                        }
+
+                        DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(DirectionsResponse));
+                        object objResponse = jsonSerializer.ReadObject(response.GetResponseStream());
+                        DirectionsResponse jsonResponse = objResponse as DirectionsResponse;
+
+                        routeLegs.AddRange(jsonResponse.routes.First().legs);
                     }
-
-                    DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(DirectionsResponse));
-                    object objResponse = jsonSerializer.ReadObject(response.GetResponseStream());
-                    DirectionsResponse jsonResponse = objResponse as DirectionsResponse;
-
-                    return jsonResponse;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return null;
             }
+
+            return routeLegs;
         }
 
         public string BuildDirectionsQuery(GeoCoordinate[] routePoints)
@@ -111,7 +123,7 @@ namespace BusTrackerWeb.Controllers
 
             // Build the API query.
             queryBuilder.AppendFormat("{0}{1}{2}{3}&departure_time=now&traffic_model=best_guess&key={4}",
-                PTV_API_BASE_URL, origin, destination, waypointBuilder, apiKey);
+                MAPS_API_BASE_URL, origin, destination, waypointBuilder, apiKey);
 
             return queryBuilder.ToString();
         }

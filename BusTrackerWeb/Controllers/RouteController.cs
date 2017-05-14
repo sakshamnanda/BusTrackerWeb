@@ -162,10 +162,10 @@ namespace BusTrackerWeb.Controllers
                 }
 
                 // Query Google Directions API.
-                DirectionsResponse directionsResponse = WebApiApplication.MapsApiControl.GetDirections(routePoints.ToArray()); 
+                List<Leg> routeLegs = WebApiApplication.MapsApiControl.GetDirections(routePoints.ToArray()); 
 
                 // Update each stop on the run with Directions ETA.
-                foreach(var leg in directionsResponse.routes.First().legs)
+                foreach(var leg in routeLegs)
                 {
 
                 }
