@@ -113,38 +113,40 @@ namespace BusTrackerWeb.Controllers
 
                 // Index through all runs to find those that have not expired.
                 List<RunModel> currentRuns = new List<RunModel>();
-                bool previousRunInPast = false;
                 foreach (RunModel run in routeRuns)
                 {
-                    // Skip this run if the previous run was in the past.
-                    // NB:  This condition optimises the algorithm i.e. avoids querying the PTV API for 
-                    //      runs that have already expired.
-                    if (true)
+                    // Check if the run is new or already cached.
+                    if (!WebApiApplication.RunsCache.Exists(r => r.RunId == run.RunId))
                     {
+                        // Get run info from the PTV API.
                         run.StoppingPattern = await WebApiApplication.PtvApiControl.
                             GetStoppingPatternAsync(run);
 
-                        // Check the current run for optimisation sentinals.
-                        DateTime runLastStoptime = run.StoppingPattern.Departures.Last().
-                            ScheduledDeparture;
-                        int runDirectionId = run.StoppingPattern.Departures.Last().DirectionId;
+                        // Update the local cache to minimise future API calls.
+                        WebApiApplication.RunsCache.Add(run);
+                    }
+                    else
+                    {
+                        // Get the cached run.
+                        run.StoppingPattern = WebApiApplication.RunsCache.
+                            Single(r => r.RunId == run.RunId).StoppingPattern;
+                    }
 
-                        if ((runDirectionId == directionId) && (runLastStoptime > DateTime.Now))
-                        {
-                            // This is a future run, update direction attribute and add to current list.
-                            run.Direction = direction;
-                            currentRuns.Add(run);
-                        }
-                        else
-                        {
-                            // This is the first run in the past, ignore this and all remaining runs.
-                            previousRunInPast = true;
-                        }
+
+                    // Check the current run for optimisation sentinals.
+                    DateTime runLastStoptime = run.StoppingPattern.Departures.Last().ScheduledDeparture;
+                    int runDirectionId = run.StoppingPattern.Departures.Last().DirectionId;
+
+                    // Add current and future runs to a collection.
+                    if ((runDirectionId == directionId) && (runLastStoptime > DateTime.Now))
+                    {
+                        run.Direction = direction;
+                        currentRuns.Add(run);
                     }
                 }
 
                 // Order the current run collection by Last Stop Scheduled Departure Time, the first 
-                // run in the ordered collection will be the current run.
+                // run in the ordered collection will be the next run.
                 currentRuns = currentRuns.
                     OrderBy(r => r.StoppingPattern.Departures.Last().ScheduledDeparture).ToList();
 
@@ -179,9 +181,20 @@ namespace BusTrackerWeb.Controllers
                 int legCount = routeLegs.Count();
                 for (int i = 0; i < legCount; i++)
                 {
-                    // Estiamted departure of next stop = last stop estimated departure time plus travel time.
-                    nextRun.StoppingPattern.Departures[i + 1].EstimatedDeparture = 
-                        nextRun.StoppingPattern.Departures[i].EstimatedDeparture.AddSeconds(routeLegs[i].duration.value);
+                    // Estimate departure of next stop = last stop estimated departure time plus travel time.
+                    DateTime estimatedDeparture = nextRun.StoppingPattern.Departures[i].EstimatedDeparture.AddSeconds(routeLegs[i].duration.value);
+
+                    // Set estimated departure time based on bus ahead or behind schedule
+                    // NB: A bus can't leave a bus stop ahead of schedule.
+                    DateTime scheduledDeparture = nextRun.StoppingPattern.Departures[i + 1].ScheduledDeparture;
+                    if (estimatedDeparture < scheduledDeparture)
+                    {
+                        nextRun.StoppingPattern.Departures[i + 1].EstimatedDeparture = scheduledDeparture;
+                    }
+                    else
+                    {
+                        nextRun.StoppingPattern.Departures[i + 1].EstimatedDeparture = estimatedDeparture;
+                    }
                 }
             }
             catch(Exception e)

@@ -19,6 +19,8 @@ namespace BusTrackerWeb
 
         public static List<BusModel> TrackedBuses;
 
+        public static List<RunModel> RunsCache;
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -32,10 +34,12 @@ namespace BusTrackerWeb
 
             // Setup a single app Google Directions API Client i.e. to prevent http port exhaustion.
             MapsApiControl = new Controllers.MapsApiClientController();
-
-
-            // Setup a stati
+            
+            // Setup a static collection of tracked buses.
             TrackedBuses = new List<BusModel>();
+
+            // Setup a static collection of cached runs.
+            RunsCache = new List<RunModel>();
         }
     }
 }
