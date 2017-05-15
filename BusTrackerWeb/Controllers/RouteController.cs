@@ -119,7 +119,7 @@ namespace BusTrackerWeb.Controllers
                     // Skip this run if the previous run was in the past.
                     // NB:  This condition optimises the algorithm i.e. avoids querying the PTV API for 
                     //      runs that have already expired.
-                    if (!previousRunInPast)
+                    if (true)
                     {
                         run.StoppingPattern = await WebApiApplication.PtvApiControl.
                             GetStoppingPatternAsync(run);
@@ -171,17 +171,17 @@ namespace BusTrackerWeb.Controllers
 
                 // TODO: Offset the for loop based on the first stop queried by the API.
 
-                int departureCount = nextRun.StoppingPattern.Departures.Count();
-                for (int i = 0; i < departureCount; i++)
-                {
-                    // Assume estimated departure time is scheduled time.
-                    if (i == 0)
-                    {
-                        nextRun.StoppingPattern.Departures[i].EstimatedDeparture = nextRun.StoppingPattern.Departures[i].ScheduledDeparture;
-                    }
+                // Initialise the first stop estimated departure time.
+                nextRun.StoppingPattern.Departures.First().EstimatedDeparture = 
+                    nextRun.StoppingPattern.Departures.First().ScheduledDeparture;
 
-                    // ETA of current stop is last stop ETA plus travel time.
-                    nextRun.StoppingPattern.Departures[i].EstimatedDeparture = nextRun.StoppingPattern.Departures[i - 1].EstimatedDeparture.AddMinutes(routeLegs[i].duration.value);
+                // Calculate and update ETA for each leg of the run.
+                int legCount = routeLegs.Count();
+                for (int i = 0; i < legCount; i++)
+                {
+                    // Estiamted departure of next stop = last stop estimated departure time plus travel time.
+                    nextRun.StoppingPattern.Departures[i + 1].EstimatedDeparture = 
+                        nextRun.StoppingPattern.Departures[i].EstimatedDeparture.AddSeconds(routeLegs[i].duration.value);
                 }
             }
             catch(Exception e)
