@@ -53,6 +53,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -162,6 +163,7 @@
     <Compile Include="Controllers\DriverController.cs" />
     <Compile Include="Controllers\PassengerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MapsApiClientController.cs" />
     <Compile Include="Controllers\PtvApiClientController.cs" />
     <Compile Include="Controllers\RouteController.cs" />
     <Compile Include="Global.asax.cs">
@@ -170,6 +172,7 @@
     <Compile Include="Models\BusModel.cs" />
     <Compile Include="Models\DepartureModel.cs" />
     <Compile Include="Models\DirectionModel.cs" />
+    <Compile Include="Models\MapsApi\DirectionsResponse.cs" />
     <Compile Include="Models\PtvApi\PtvApiDirection.cs" />
     <Compile Include="Models\PtvApi\PtvApiDeparturesResponse.cs" />
     <Compile Include="Models\PtvApi\PtvApiDirectionsResponse.cs" />
