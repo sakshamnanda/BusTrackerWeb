@@ -165,21 +165,17 @@ namespace BusTrackerWeb.Controllers
 
                 // Query Google Directions API for ETA.
 
-                // TODO: Only query the stops from the last stop visited by the bus.
-
                 List<Leg> routeLegs = WebApiApplication.MapsApiControl.GetDirections(routePoints.ToArray());
 
                 // Update each stop on the run with ETA.
-
-                // TODO: Offset the for loop based on the first stop queried by the API.
 
                 // Initialise the first stop estimated departure time.
                 nextRun.StoppingPattern.Departures.First().EstimatedDeparture = 
                     nextRun.StoppingPattern.Departures.First().ScheduledDeparture;
 
-                // Calculate and update ETA for each leg of the run.
+                // Calculate and update optimum ETA for each leg of the run.
                 int legCount = routeLegs.Count();
-                for (int i = 0; i < legCount; i++)
+                for (int i = 0; i < legCount; i++)    
                 {
                     // Estimate departure of next stop = last stop estimated departure time plus travel time.
                     DateTime estimatedDeparture = nextRun.StoppingPattern.Departures[i].EstimatedDeparture.AddSeconds(routeLegs[i].duration.value);
@@ -196,6 +192,35 @@ namespace BusTrackerWeb.Controllers
                         nextRun.StoppingPattern.Departures[i + 1].EstimatedDeparture = estimatedDeparture;
                     }
                 }
+
+                // Find the last scheduled stop the bus should have reached.
+                StopModel lastScheduledStop = nextRun.StoppingPattern.Departures.First(d => d.ScheduledDeparture >= DateTime.Now).Stop;
+
+                // Check if that bus has reached the last scheduled stop.
+                int busPreviousStopId = WebApiApplication.TrackedBuses.First(b => b.RouteId == route.RouteId).BusPreviousStop.StopId;
+                if (busPreviousStopId != lastScheduledStop.StopId)
+                {
+                    // If the bus is late use the leg durations to estimate how late the bus is.
+                    // Find the index of the actual stop.
+                    int actualStopIndex = nextRun.StoppingPattern.Departures.FindIndex(d => d.Stop.StopId == busPreviousStopId);
+
+                    // Find the index of the scheduled stop.
+                    int scheduledStopIndex = nextRun.StoppingPattern.Departures.FindIndex(d => d.Stop.StopId == lastScheduledStop.StopId);
+
+                    // Take departures between actual and scheduled.
+                    List<Leg> lateLegs = routeLegs.Skip(actualStopIndex).Take(scheduledStopIndex - actualStopIndex).ToList();
+
+                    // Sum leg durations, this is how late the bus is.
+                    int busDelaySeconds = lateLegs.Sum(l => l.duration.value);
+
+                    // From the current stop, offset the optimum estimated departure times by how late the bus is.
+                    for(int i = (actualStopIndex + 1); i < nextRun.StoppingPattern.Departures.Count(); i++)
+                    {
+                        nextRun.StoppingPattern.Departures[i].EstimatedDeparture = 
+                            nextRun.StoppingPattern.Departures[i].EstimatedDeparture.AddSeconds(busDelaySeconds);
+                    }
+                }
+                
             }
             catch(Exception e)
             {
