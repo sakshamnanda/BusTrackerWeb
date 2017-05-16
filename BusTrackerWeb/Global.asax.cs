@@ -15,7 +15,11 @@ namespace BusTrackerWeb
     {
         public static PtvApiClientController PtvApiControl;
 
+        public static MapsApiClientController MapsApiControl;
+
         public static List<BusModel> TrackedBuses;
+
+        public static List<RunModel> RunsCache;
 
         protected void Application_Start()
         {
@@ -28,8 +32,14 @@ namespace BusTrackerWeb
             // Setup a single app PTV API Client i.e. to prevent http port exhaustion.
             PtvApiControl = new Controllers.PtvApiClientController();
 
-            // Setup a stati
+            // Setup a single app Google Directions API Client i.e. to prevent http port exhaustion.
+            MapsApiControl = new Controllers.MapsApiClientController();
+            
+            // Setup a static collection of tracked buses.
             TrackedBuses = new List<BusModel>();
+
+            // Setup a static collection of cached runs.
+            RunsCache = new List<RunModel>();
         }
     }
 }
