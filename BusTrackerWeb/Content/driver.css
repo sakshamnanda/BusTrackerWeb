@@ -1,0 +1,163 @@
+html,
+body,
+.content {
+    min-height: 100%;
+    height: 100%;
+}
+
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.map {
+	min-height:500px;
+	height:100%;
+	padding-right: 0;
+}
+
+#map_canvas {
+	max-height:500px;
+	width: 100%;
+	height: 500px;
+}
+
+.routes-badge {
+	font-family: 'Helvetica';
+	z-index:5;
+}
+
+.routes-search input,
+.routes-search select,
+.routes-search textarea {
+	max-width: 100%;
+}
+.routes-search .dropdown.dropdown-lg .dropdown-menu {
+    margin-top: -1px;
+    padding: 6px 6px;
+}
+.routes-search .input-group-btn .btn-group {
+    display: flex !important;
+}
+.routes-search .btn-group .btn {
+    border-radius: 0;
+    margin-left: -1px;
+}
+.routes-search .btn-group .btn:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.routes-search .btn-group .form-horizontal .btn[type="submit"] {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.routes-search .form-horizontal .form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+.routes-search .form-group .form-control:last-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+@media screen and (min-width: 768px) {
+    .routes-search #adv-search {
+        min-width: 250px;
+		width: 100%;
+        margin: 0 auto;
+    }
+    .routes-search .dropdown.dropdown-lg {
+        position: static !important;
+    }
+    .routes-search .dropdown.dropdown-lg .dropdown-menu {
+        min-width: 500px;
+        width: 500px;
+    }
+}
+
+.scrollable-panel {
+    height: auto;
+    max-height: 425px;
+    overflow-x: hidden;
+}
+
+/* Set gray background color and 100% height */
+
+.sidenav {
+    /* background-color: #f1f1f1; */
+    height: 100%;
+	padding-left: 0;
+    position: relative;
+	max-height: 500px;
+}
+.sidenav-content>.panel {
+	max-height: 500px;
+}
+	
+.sidenav .dropdown-menu {
+    margin-left: calc(50% - 80px);
+    margin-right: calc(50% - 80px);
+}
+/*
+.sidenav-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 55px;
+    right: 0;
+    padding: inherit;
+	overflow-y: scroll;
+    margin: 0;
+    float: none;
+}
+*/
+#accordion .panel {
+}
+#accordion .panel-heading {
+    padding: 0;
+}
+#accordion .panel-title > a {
+    display: block;
+    padding: 0.5em 0.7em;
+    outline: none;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Helvetica';
+    text-decoration: none;
+}
+#accordion .panel-title > a.accordion-toggle::before,
+#accordion a[data-toggle="collapse"]::before {
+    content: "\e113";
+    float: left;
+    font-family: 'Glyphicons Halflings';
+    margin-right: 1em;
+}
+#accordion .panel-title > a.accordion-toggle.collapsed::before,
+#accordion a.collapsed[data-toggle="collapse"]::before {
+    content: "\e114";
+}
+
+#routes-available li {
+	font-family: 'Helvetica';
+}
+
+.routes-group-list {
+	margin-bottom: 0;
+}
+
+.list-group-item {
+	white-space: normal;
+	word-wrap: break-word;
+}
