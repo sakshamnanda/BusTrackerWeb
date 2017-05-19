@@ -3,7 +3,7 @@ function initializeRoutes(){
 	
 	jQuery.ajax({
 		type: "GET",
-		url: "/api/Route/GetRoutes",
+		url: "http://bustrackerweb.azurewebsites.net/api/Route/GetRoutes",
 		headers: {          
 			Accept: "application/xml"  
 		},
