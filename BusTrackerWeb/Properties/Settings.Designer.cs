@@ -49,5 +49,23 @@ namespace BusTrackerWeb.Properties {
                 return ((string)(this["PtvApiBaseUrl"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int BusStopMaxDistance {
+            get {
+                return ((int)(this["BusStopMaxDistance"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("AIzaSyAyEgv4_85K8azHU2fYz78xxGAT3ne3egU")]
+        public string MapsApiDeveloperKey {
+            get {
+                return ((string)(this["MapsApiDeveloperKey"]));
+            }
+        }
     }
 }

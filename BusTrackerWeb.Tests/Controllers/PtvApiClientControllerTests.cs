@@ -29,6 +29,17 @@ namespace BusTrackerWeb.Controllers.Tests
         }
 
         [TestMethod()]
+        public async Task GetRoutesByNameAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+
+            List<RouteModel> routes = await apiControl.GetRoutesByNameAsync("Deakin");
+
+            Assert.IsTrue(routes.Count == 9);
+        }
+
+
+        [TestMethod()]
         public async Task GetRouteRunsAsyncTest()
         {
             PtvApiClientController apiControl = new PtvApiClientController();
@@ -94,6 +105,21 @@ namespace BusTrackerWeb.Controllers.Tests
             StoppingPatternModel pattern = await apiControl.GetStoppingPatternAsync(run);
 
             Assert.IsTrue(pattern.Departures.Count != 0);
+        }
+
+        [TestMethod()]
+        public async Task GetStopsByDistanceAsyncTest()
+        {
+            PtvApiClientController apiControl = new PtvApiClientController();
+
+            decimal latitude = -38.145M;
+            decimal longitude = 144.354M;
+            int maxDistance = 150;
+
+            List<StopModel> stops = 
+                await apiControl.GetStopsByDistanceAsync(latitude, longitude, maxDistance);
+
+            Assert.IsTrue(stops.Count == 2);
         }
     }
 }

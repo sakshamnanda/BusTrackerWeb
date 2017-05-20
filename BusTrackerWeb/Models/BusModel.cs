@@ -30,7 +30,7 @@ namespace BusTrackerWeb.Models
         /// <summary>
         /// The bus's previous stop.
         /// </summary>
-        public int BusPreviousStopId { get; set; }
+        public StopModel BusPreviousStop { get; set; }
 
         /// <summary>
         /// The PTV Route Id of the current run.
