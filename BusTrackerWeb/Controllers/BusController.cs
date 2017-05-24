@@ -39,13 +39,14 @@ namespace BusTrackerWeb.Controllers
                     GetRouteStopsAsync(new RouteModel { RouteId = bus.RouteId });
 
                 // If the bus is in proximity to a stop on route, update the bus last stop.
+                StopModel previousStop = new StopModel();
                 if (proximiytStops.Count != 0)
                 {
                     StopModel closestStop = proximiytStops.First();
 
                     if (routeStops.Exists(s => s.StopId == closestStop.StopId))
                     {
-                        bus.BusPreviousStop = closestStop;
+                        previousStop = closestStop;
                     }
                 }
 
@@ -55,10 +56,16 @@ namespace BusTrackerWeb.Controllers
                     // If exists, update the bus location.
                     BusModel trackedBus = WebApiApplication.TrackedBuses.
                         Single(b => b.BusRegoNumber == bus.BusRegoNumber);
+
                     trackedBus.BusLatitude = bus.BusLatitude;
                     trackedBus.BusLongitude = bus.BusLongitude;
                     trackedBus.RouteId = bus.RouteId;
-                    trackedBus.BusPreviousStop = bus.BusPreviousStop;
+
+                    // Only update the previous stop if a valid stop is found.
+                    if (previousStop.StopId != 0)
+                    {
+                        trackedBus.BusPreviousStop = previousStop;
+                    }
                 }
                 else
                 {
@@ -69,7 +76,7 @@ namespace BusTrackerWeb.Controllers
                         BusLatitude = bus.BusLatitude,
                         BusLongitude = bus.BusLongitude,
                         RouteId = bus.RouteId,
-                        BusPreviousStop = bus.BusPreviousStop
+                        BusPreviousStop = previousStop
                     };
 
                     WebApiApplication.TrackedBuses.Add(newBus);
