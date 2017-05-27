@@ -115,6 +115,8 @@ function startSimulation(stops) {
     var stops = [],
         stop_names = [],
         stop_ids = [];
+        scheduled_departures = [],
+        estimated_departures = [];
 		
 	var totalStops = locations.stops.length;
 	if(totalStops > 23) totalStops = 23;
@@ -131,6 +133,8 @@ function startSimulation(stops) {
     for (var i = 1; i < totalStops - 2; i++) {
 		stop_names.push(locations.stops[i].stop_name);
 		stop_ids.push(locations.stops[i].stop_id);
+		scheduled_departures.push(locations.stops[i].scheduled_departure);
+		estimated_departures.push(locations.stops[i].estimated_departure);
 		stop = {
 			lat: locations.stops[i].stop_latitude,
 			lng: locations.stops[i].stop_longitude
@@ -141,10 +145,10 @@ function startSimulation(stops) {
 		});
     }
 
-    createMarker(startCoords, locations.stops[0].stop_name, "", false);
+    createMarker(startCoords, locations.stops[0].stop_name, "\nScheduled Departure Time:" + "\n Estimated Departure Time:", false);
 	
     var clusterMarkers = stops.map(function (coordinates, i) {
-        return createMarker(coordinates.location, stop_names[i], "Stop Id " + stop_ids[i], false);
+        return createMarker(coordinates.location, stop_names[i], "Stop Id " + stop_ids[i] + "\nScheduled Departure Time:" + scheduled_departures[i] + "\n Estimated Departure Time:" + estimated_departures[i], false);
     });
     createMarker(endCoords, locations.stops[totalStops - 1].stop_name, "", false);
     
